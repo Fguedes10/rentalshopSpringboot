@@ -1,8 +1,8 @@
 package mindera.bootcamp.rentalshop.service;
 
-import mindera.bootcamp.rentalshop.entity.Client;
 import mindera.bootcamp.rentalshop.entity.Vehicle;
 import mindera.bootcamp.rentalshop.repository.VehicleRepository;
+import mindera.bootcamp.rentalshop.utilMessages.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,32 +25,33 @@ public class VehicleService {
 
     public Vehicle getVehicle(Long vehicleId) {
         Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
-        if(vehicleOptional.isEmpty()){
-            throw new IllegalStateException("The vehicle with " + vehicleId + " does not exist");
+        if (vehicleOptional.isEmpty()) {
+            throw new IllegalStateException(Message.VEHICLE_WITH_ID + vehicleId + Message.NOT_EXISTS);
         }
         return vehicleOptional.get();
     }
 
     public void addNewVehicle(Vehicle vehicle) {
         Optional<Vehicle> vehicleOptional = vehicleRepository.findByPlateNumber(vehicle.getPlateNumber());
-        if(vehicleOptional.isPresent()){
-            throw new IllegalStateException("A vehicle with these plate number already exists.");
+        if (vehicleOptional.isPresent()) {
+            throw new IllegalStateException(Message.REPEATED_PLATE_ERROR);
         }
         vehicleRepository.save(vehicle);
     }
-    public Vehicle deleteVehicle(Long vehicleId) {
+
+    public void deleteVehicle(Long vehicleId) {
         Optional<Vehicle> deletedVehicle = vehicleRepository.findById(vehicleId);
         boolean exists = vehicleRepository.existsById(vehicleId);
-        if(!exists){
-            throw new IllegalStateException("The vehicle with " + vehicleId + " id does not exist");
+        if (!exists) {
+            throw new IllegalStateException(Message.VEHICLE_WITH_ID + vehicleId + Message.NOT_EXISTS);
         }
-        return deletedVehicle.get();
+        vehicleRepository.delete(deletedVehicle.get());
     }
 
-    public Vehicle patchVehicleById(Long vehicleId, Vehicle vehicle) {
+    public void patchVehicleById(Long vehicleId, Vehicle vehicle) {
         Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
         if (!vehicleOptional.isPresent()) {
-            throw new IllegalStateException("The vehicle with " + vehicleId + " id does not exist");
+            throw new IllegalStateException(Message.VEHICLE_WITH_ID + vehicleId + Message.NOT_EXISTS);
         }
         Vehicle vehicleToPatch = vehicleOptional.get();
         if (vehicle.getBrand() != null && !vehicle.getBrand().isEmpty() && !vehicle.getBrand().equals(vehicleToPatch.getBrand())) {
@@ -81,14 +82,14 @@ public class VehicleService {
             vehicleToPatch.setDailyPrice(vehicle.getDailyPrice());
         }
 
-        return vehicleRepository.save(vehicleToPatch);
+        vehicleRepository.save(vehicleToPatch);
     }
 
     public Vehicle putVehicleById(Long vehicleId, Vehicle vehicle) {
         vehicle.setId(vehicleId);
         Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
-        if(vehicleOptional.isEmpty()){
-            throw new IllegalStateException("The vehicle with " + vehicle + " id does not exist");
+        if (vehicleOptional.isEmpty()) {
+            throw new IllegalStateException(Message.VEHICLE_WITH_ID + vehicleId + Message.NOT_EXISTS);
         }
         return vehicleRepository.save(vehicle);
     }

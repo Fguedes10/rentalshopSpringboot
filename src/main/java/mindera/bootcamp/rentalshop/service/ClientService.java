@@ -2,11 +2,13 @@ package mindera.bootcamp.rentalshop.service;
 
 import mindera.bootcamp.rentalshop.entity.Client;
 import mindera.bootcamp.rentalshop.repository.ClientRepository;
+import mindera.bootcamp.rentalshop.utilMessages.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class ClientService {
 
@@ -23,33 +25,33 @@ public class ClientService {
 
     public Client getClient(Long clientId) {
         Optional<Client> clientOptional = clientRepository.findById(clientId);
-        if(clientOptional.isEmpty()){
-            throw new IllegalStateException("The client with " + clientId + " does not exist");
+        if (clientOptional.isEmpty()) {
+            throw new IllegalStateException(Message.CLIENT_WITH_ID + clientId + Message.NOT_EXISTS);
         }
         return clientOptional.get();
     }
 
     public void addNewClient(Client client) {
         Optional<Client> clientOptional = this.clientRepository.findByEmail(client.getEmail());
-        if(clientOptional.isPresent()){
-            throw new IllegalStateException("A client with these email already exists.");
+        if (clientOptional.isPresent()) {
+            throw new IllegalStateException(Message.REPEATED_EMAIL_ERROR);
         }
         clientRepository.save(client);
     }
 
-    public Client deleteClient(Long clientId) {
+    public void deleteClient(Long clientId) {
         Optional<Client> deletedClient = clientRepository.findById(clientId);
         boolean exists = clientRepository.existsById(clientId);
-        if(!exists){
-            throw new IllegalStateException("The client with " + clientId + " id does not exist");
+        if (!exists) {
+            throw new IllegalStateException(Message.CLIENT_WITH_ID + clientId + Message.NOT_EXISTS);
         }
-        return deletedClient.get();
+        clientRepository.delete(deletedClient.get());
     }
 
     public Client patchClientById(Long clientId, Client client) {
         Optional<Client> clientOptional = clientRepository.findById(clientId);
         if (!clientOptional.isPresent()) {
-            throw new IllegalStateException("The client with " + clientId + " id does not exist");
+            throw new IllegalStateException(Message.CLIENT_WITH_ID + clientId + Message.NOT_EXISTS);
         }
         Client clientToPatch = clientOptional.get();
         if (client.getFirstName() != null && !client.getFirstName().isEmpty() && !client.getFirstName().equals(clientToPatch.getFirstName())) {
@@ -76,8 +78,8 @@ public class ClientService {
     public Client putClientById(Long clientId, Client client) {
         client.setId(clientId);
         Optional<Client> clientOptional = clientRepository.findById(clientId);
-        if(clientOptional.isEmpty()){
-            throw new IllegalStateException("The client with " + clientId + " id does not exist");
+        if (clientOptional.isEmpty()) {
+            throw new IllegalStateException(Message.CLIENT_WITH_ID + clientId + Message.NOT_EXISTS);
         }
         return clientRepository.save(client);
     }

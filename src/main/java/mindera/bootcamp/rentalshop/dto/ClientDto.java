@@ -4,27 +4,28 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import mindera.bootcamp.rentalshop.utilMessages.Message;
 
 import java.time.LocalDate;
 
 public record ClientDto(
-        @NotBlank(message = "Must have a First Name")
+        @NotBlank(message = Message.BLANK_FIRSTNAME)
         String firstName,
-        @NotBlank(message = "Must have a Last Name")
+        @NotBlank(message = Message.BLANK_LASTNAME)
         String lastName,
-        @NotBlank(message = "Must have a Email")
+        @NotBlank(message = Message.BLANK_EMAIL)
         String email,
-        @Pattern(regexp = "/^\\d+$/", message = "Please input a valid NIF number")
+        @Pattern(regexp = "/^\\d+$/", message = Message.INVALID_NIF)
         @Size(min = 9, max = 9)
-        @NotBlank(message = "Must have a NIF")
+        @NotBlank(message = Message.BLANK_NIF)
         String nif,
-        @NotBlank(message = "Must have a date of birth")
-        @Past(message = "Must be a valid date of birth")
+        @NotBlank(message = Message.BLANK_DATEOFBIRTH)
+        @Past(message = Message.INVALID_DATEOFBIRTH)
         LocalDate dateOfBirth,
 
-        @Pattern(regexp = "^[0-9]", message = "Please input a valid NIF")
+        @Pattern(regexp = "^[0-9]", message = Message.INVALID_DRIVERLICENSE)
         @Size(min = 9, max = 9)
-        @NotBlank(message = "Must have a Driver License number")
+        @NotBlank(message = Message.BLANK_DRIVERLICENSE)
         String driverLicense
 ) {
 }

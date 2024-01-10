@@ -17,7 +17,34 @@ public class Message {
     public static final String INVALID_DAILY_PRICE = "Please input a Daily Price";
 
 
+    //CLIENTSERVICE MESSAGES
 
+    public static final String CLIENT_WITH_ID = "The client with id ";
+    public static final String NOT_EXISTS = " does not exist";
+    public static final String REPEATED_EMAIL_ERROR = "A client with these email already exists.";
+
+    //VEHICLESERVICE MESSAGES
+
+    public static final String VEHICLE_WITH_ID = "The vehicle with id ";
+    public static final String REPEATED_PLATE_ERROR = "A vehicle with these plate number already exists.";
+
+    //RENTALSERVICE MESSAGES
+    public static final String RENTAL_WITH_ID = "The rental with id ";
+    public static final String ALREADY_RENTED = "This vehicle is currently rented.";
+
+
+    //CLIENTDBO
+
+    public static final String BLANK_FIRSTNAME = "Must have a First Name";
+    public static final String BLANK_LASTNAME = "Must have a Last Name";
+    public static final String BLANK_EMAIL = "Must have a Email";
+
+    public static final String INVALID_NIF = "Please input a valid NIF number";
+    public static final String BLANK_NIF = "Must have a NIF";
+    public static final String BLANK_DATEOFBIRTH = "Must have a date of birth";
+    public static final String INVALID_DATEOFBIRTH = "Must be a valid date of birth";
+    public static final String BLANK_DRIVERLICENSE = "Must have a Driver License number";
+    public static final String INVALID_DRIVERLICENSE = "Please input a valid Driver License number";
 
 
 

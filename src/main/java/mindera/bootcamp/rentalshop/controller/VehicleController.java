@@ -38,13 +38,15 @@ public class VehicleController {
     }
 
     @DeleteMapping(path = "{vehicleId}")
-    public ResponseEntity<Vehicle> deleteVehicleById (@PathVariable("vehicleId") Long vehicleId, @RequestBody Vehicle vehicle){
-        return new ResponseEntity<>(vehicleService.deleteVehicle(vehicleId), HttpStatus.OK);
+    public ResponseEntity<Vehicle> deleteVehicleById (@PathVariable("vehicleId") Long vehicleId){
+        vehicleService.deleteVehicle(vehicleId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping(path = "{vehicleId}")
     public ResponseEntity<Vehicle> patchVehicleById(@PathVariable("vehicleId") Long vehicleId, @RequestBody Vehicle vehicle){
-        return new ResponseEntity<>(vehicleService.patchVehicleById(vehicleId, vehicle), HttpStatus.OK);
+        vehicleService.patchVehicleById(vehicleId, vehicle);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping(path = "{vehicleId}")
