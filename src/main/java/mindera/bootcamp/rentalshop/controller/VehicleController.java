@@ -1,5 +1,7 @@
 package mindera.bootcamp.rentalshop.controller;
 
+import mindera.bootcamp.rentalshop.dto.vehicleDto.VehicleCreateDto;
+import mindera.bootcamp.rentalshop.dto.vehicleDto.VehiclePatchDto;
 import mindera.bootcamp.rentalshop.entity.Client;
 import mindera.bootcamp.rentalshop.entity.Vehicle;
 import mindera.bootcamp.rentalshop.service.VehicleService;
@@ -22,35 +24,36 @@ public class VehicleController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Vehicle>> getVehicles(){
+    public ResponseEntity<List<Vehicle>> getVehicles() {
         return new ResponseEntity<>(vehicleService.getVehicles(), HttpStatus.OK);
     }
 
     @GetMapping("/{vehicleId}")
-    public ResponseEntity<Vehicle> getVehicle(@PathVariable("vehicleId") Long vehicleId){
+    public ResponseEntity<Vehicle> getVehicle(@PathVariable("vehicleId") Long vehicleId) {
         return new ResponseEntity<>(vehicleService.getVehicle(vehicleId), HttpStatus.OK);
     }
 
     @PostMapping("/")
-    public ResponseEntity<Vehicle> addNewVehicle(@RequestBody Vehicle vehicle){
+    public ResponseEntity<Vehicle> addNewVehicle(@RequestBody VehicleCreateDto vehicle) {
         vehicleService.addNewVehicle(vehicle);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "{vehicleId}")
-    public ResponseEntity<Vehicle> deleteVehicleById (@PathVariable("vehicleId") Long vehicleId){
+    public ResponseEntity<Vehicle> deleteVehicleById(@PathVariable("vehicleId") Long vehicleId) {
         vehicleService.deleteVehicle(vehicleId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping(path = "{vehicleId}")
-    public ResponseEntity<Vehicle> patchVehicleById(@PathVariable("vehicleId") Long vehicleId, @RequestBody Vehicle vehicle){
+    public ResponseEntity<Vehicle> patchVehicleById(@PathVariable("vehicleId") Long vehicleId,
+                                                    @RequestBody VehiclePatchDto vehicle) {
         vehicleService.patchVehicleById(vehicleId, vehicle);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping(path = "{vehicleId}")
-    public ResponseEntity<Vehicle> putVehicleById(@PathVariable("vehicleId") Long vehicleId, @RequestBody Vehicle vehicle){
+    public ResponseEntity<Vehicle> putVehicleById(@PathVariable("vehicleId") Long vehicleId, @RequestBody Vehicle vehicle) {
         return new ResponseEntity<>(vehicleService.putVehicleById(vehicleId, vehicle), HttpStatus.OK);
     }
 

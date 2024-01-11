@@ -1,4 +1,4 @@
-package mindera.bootcamp.rentalshop.dto;
+package mindera.bootcamp.rentalshop.dto.vehicleDto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
@@ -8,8 +8,9 @@ import mindera.bootcamp.rentalshop.utilMessages.Message;
 
 import java.time.LocalDate;
 
-public record VehicleDto(
+public record VehicleCreateDto(
 
+        Long id,
 
         @NotBlank(message = Message.BLANK_BRAND)
         String brand,

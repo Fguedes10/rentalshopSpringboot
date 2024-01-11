@@ -47,5 +47,9 @@ public class Message {
     public static final String INVALID_DRIVERLICENSE = "Please input a valid Driver License number";
 
 
+    // CLIENTPATHDTO
+
+    public static final String INVALID_FIRSTNAME = "Please input a valid First Name";
+    public static final String INVALID_LASTNAME = "Please input a valid First Name";
 
 }
