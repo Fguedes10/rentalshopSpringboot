@@ -30,4 +30,8 @@ public class Rental {
     private Long totalRentalCost;
 
 
+    public Rental(Vehicle vehicle, Client client) {
+        this.vehicle = vehicle;
+        this.client = client;
+    }
 }

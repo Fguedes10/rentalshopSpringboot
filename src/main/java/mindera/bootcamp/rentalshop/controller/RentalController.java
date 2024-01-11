@@ -32,7 +32,7 @@ public class RentalController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Rental> addNewRental(@RequestBody Rental rental) {
+    public ResponseEntity<Rental> addNewRental(@RequestBody RentalCreateDto rental) {
         rentalService.addNewRental(rental);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

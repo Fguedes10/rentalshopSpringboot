@@ -1,6 +1,6 @@
 package mindera.bootcamp.rentalshop.service;
 
-import mindera.bootcamp.rentalshop.converter.RentalConverter;
+import mindera.bootcamp.rentalshop.converter.VehicleConverter;
 import mindera.bootcamp.rentalshop.dto.rentalDto.RentalCreateDto;
 import mindera.bootcamp.rentalshop.entity.Client;
 import mindera.bootcamp.rentalshop.entity.Rental;
@@ -18,9 +18,14 @@ public class RentalService {
 
     private final RentalRepository rentalRepository;
 
+    private final VehicleService vehicleService;
+    private final ClientService clientService;
+
     @Autowired
-    public RentalService(RentalRepository rentalRepository) {
+    public RentalService(RentalRepository rentalRepository, VehicleService vehicleService, ClientService clientService) {
         this.rentalRepository = rentalRepository;
+        this.vehicleService = vehicleService;
+        this.clientService = clientService;
     }
 
     public List<Rental> getRentals() {
@@ -35,17 +40,11 @@ public class RentalService {
         return rentalOptional.get();
     }
 
-    public void addNewRental(Rental rental) {
-        Optional<Rental> optionalRental = rentalRepository.findByVehicleId(rental.getVehicle());
-        if(optionalRental.isPresent()){
-            throw new IllegalStateException("Car is already rented");
-        }
-        Optional<Rental> optionalRental1 = rentalRepository.findByClientId(rental.getClient());
-        if(optionalRental1.isPresent()){
-            throw new IllegalStateException("Client already has a car rented");
-        }
-        rentalRepository.save(optionalRental.get());
-        rentalRepository.save(optionalRental1.get());
+    public void addNewRental(RentalCreateDto rental) {
+        Vehicle vehicle = this.vehicleService.getVehicle(rental.vehicleId());
+        Client client = this.clientService.getClient(rental.clientId());
+        Rental rental1 = new Rental(vehicle, client);
+        rentalRepository.save(rental1);
     }
 
     public void deleteRental(Long rentalId) {
