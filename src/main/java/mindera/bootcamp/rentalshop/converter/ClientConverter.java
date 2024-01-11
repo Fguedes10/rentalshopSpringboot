@@ -8,7 +8,6 @@ public class ClientConverter {
 
     public static ClientCreateDto fromEntityToDto(Client client){
         return new ClientCreateDto(
-                client.getId(),
                 client.getFirstName(),
                 client.getLastName(),
                 client.getEmail(),

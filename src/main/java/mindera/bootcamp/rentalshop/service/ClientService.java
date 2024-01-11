@@ -43,16 +43,16 @@ public class ClientService {
         clientRepository.save(client1);
     }
 
-    public void deleteClient(Long clientId) {
+/*    public void deleteClient(Long clientId) {
         Optional<Client> deletedClient = clientRepository.findById(clientId);
         boolean exists = clientRepository.existsById(clientId);
         if (!exists) {
             throw new IllegalStateException(Message.CLIENT_WITH_ID + clientId + Message.NOT_EXISTS);
         }
         clientRepository.delete(deletedClient.get());
-    }
+    }*/
 
-    public Client patchClientById(Long clientId, ClientPatchDto client) {
+    public void patchClientById(Long clientId, ClientPatchDto client) {
         Optional<Client> clientOptional = clientRepository.findById(clientId);
         if (!clientOptional.isPresent()) {
             throw new IllegalStateException(Message.CLIENT_WITH_ID + clientId + Message.NOT_EXISTS);
@@ -67,7 +67,7 @@ public class ClientService {
         if (client.email() != null && !client.email().isEmpty() && !client.email().equals(clientToPatch.getEmail())) {
             clientToPatch.setEmail(client.email());
         }
-        return clientRepository.save(clientToPatch);
+         clientRepository.save(clientToPatch);
     }
 
     public void putClientById(Long clientId, Client client) {

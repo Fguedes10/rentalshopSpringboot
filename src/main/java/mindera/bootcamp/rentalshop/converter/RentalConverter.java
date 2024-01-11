@@ -11,15 +11,13 @@ public class RentalConverter {
                 rental.getVehicle().getId(),
                 rental.getClient().getId(),
                 rental.getRentalStartDate(),
-                rental.getRentalEndDate(),
-                rental.getTotalRentalCost()
+                rental.getRentalEndDate()
         );
     }
 
     public static Rental fromDtoToEntity(RentalCreateDto rentalCreateDto){
         return Rental.builder()
                 .rentalStartDate(rentalCreateDto.rentalStartDate())
-                .rentalEndDate(rentalCreateDto.rentalEndDate())
-                .totalRentalCost(rentalCreateDto.totalRentalCost()).build();
+                .rentalEndDate(rentalCreateDto.rentalEndDate()).build();
     }
 }

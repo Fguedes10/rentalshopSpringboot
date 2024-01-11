@@ -10,15 +10,13 @@ import java.time.LocalDate;
 
 public record VehicleCreateDto(
 
-        Long id,
-
         @NotBlank(message = Message.BLANK_BRAND)
         String brand,
         @NotBlank(message = Message.BLANK_PLATE_NUMBER)
         String plateNumber,
 
         @NotBlank(message = Message.BLANK_COLOR)
-        @Pattern(regexp = "[0-9]", message = Message.INVALID_NUMBER_OF_SEATS)
+        //@Pattern(regexp = "[0-9]", message = Message.INVALID_NUMBER_OF_SEATS)
         String color,
 
         @NotBlank(message = Message.BLANK_CUBIC)
@@ -28,8 +26,8 @@ public record VehicleCreateDto(
         Integer horsePower,
 
         @NotBlank(message = Message.BLANK_NUMBER_OF_SEATS)
-        @Size(min = 7, max = 7)
-        @Pattern(regexp = "^[0-9]", message = Message.INVALID_NUMBER_OF_SEATS)
+        //@Size(min = 7, max = 7)
+        //@Pattern(regexp = "^[0-9]", message = Message.INVALID_NUMBER_OF_SEATS)
         Integer numberOfSeats,
         @NotBlank(message = Message.BLANK_MILEAGE)
         Long mileage,
@@ -38,8 +36,8 @@ public record VehicleCreateDto(
         LocalDate plateRegistrationDate,
 
         @NotBlank(message = Message.BLANK_DAILY_PRICE)
-        @Size(min = 4, max = 4)
-        @Pattern(regexp = "^[0-9]", message = Message.INVALID_DAILY_PRICE)
+        //@Size(min = 4, max = 4)
+        //@Pattern(regexp = "^[0-9]", message = Message.INVALID_DAILY_PRICE)
         Long dailyPrice
 ) {
 }

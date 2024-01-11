@@ -17,7 +17,6 @@ import java.util.Optional;
 public class RentalService {
 
     private final RentalRepository rentalRepository;
-
     private final VehicleService vehicleService;
     private final ClientService clientService;
 
@@ -43,7 +42,7 @@ public class RentalService {
     public void addNewRental(RentalCreateDto rental) {
         Vehicle vehicle = this.vehicleService.getVehicle(rental.vehicleId());
         Client client = this.clientService.getClient(rental.clientId());
-        Rental rental1 = new Rental(vehicle, client);
+
         rentalRepository.save(rental1);
     }
 

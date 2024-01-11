@@ -1,16 +1,14 @@
 package mindera.bootcamp.rentalshop.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 @Data
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
+@NoArgsConstructor(force = true)
 @Entity
 @Table
 public class Rental {
@@ -21,17 +19,14 @@ public class Rental {
 
     @ManyToOne
     @JoinColumn(name = "client_Id")
-    private Client client;
+    private final Client client;
     @ManyToOne
     @JoinColumn(name = "vehicle_Id")
-    private Vehicle vehicle;
+    private final Vehicle vehicle;
     private LocalDate rentalStartDate;
     private LocalDate rentalEndDate;
     private Long totalRentalCost;
 
 
-    public Rental(Vehicle vehicle, Client client) {
-        this.vehicle = vehicle;
-        this.client = client;
-    }
+
 }

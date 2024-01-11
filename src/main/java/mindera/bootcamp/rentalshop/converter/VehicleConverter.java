@@ -8,7 +8,6 @@ public class VehicleConverter {
 
     public static VehicleCreateDto fromEntityToDto(Vehicle vehicle){
         return new VehicleCreateDto(
-                vehicle.getId(),
                 vehicle.getBrand(),
                 vehicle.getPlateNumber(),
                 vehicle.getColor(),

@@ -36,18 +36,4 @@ public class Vehicle {
     private Long dailyPrice;
 
 
-    public Vehicle(Long id, String brand, String plateNumber, String color, Double cubicCapacity, Integer horsePower, Integer numberOfSeats, Long mileage, LocalDate plateRegistrationDate, Long dailyPrice) {
-        this.id = id;
-        this.brand = brand;
-        this.plateNumber = plateNumber;
-        this.color = color;
-        this.cubicCapacity = cubicCapacity;
-        this.horsePower = horsePower;
-        this.numberOfSeats = numberOfSeats;
-        this.mileage = mileage;
-        this.plateRegistrationDate = plateRegistrationDate;
-        this.dailyPrice = dailyPrice;
-        this.available = true;
-    }
-
 }
