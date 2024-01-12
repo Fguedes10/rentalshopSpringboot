@@ -2,9 +2,10 @@ package mindera.bootcamp.rentalshop.controller;
 
 import jakarta.validation.Valid;
 import mindera.bootcamp.rentalshop.dto.clientDto.ClientCreateDto;
+import mindera.bootcamp.rentalshop.dto.clientDto.ClientGetDto;
 import mindera.bootcamp.rentalshop.dto.clientDto.ClientPatchDto;
 import mindera.bootcamp.rentalshop.entity.Client;
-import mindera.bootcamp.rentalshop.service.ClientService;
+import mindera.bootcamp.rentalshop.service.ClientServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,21 +18,21 @@ import java.util.List;
 @RequestMapping("api/version1/clients")
 public class ClientController {
 
-    private final ClientService clientService;
+    private final ClientServiceImpl clientServiceImpl;
 
     @Autowired
-    public ClientController(ClientService clientService) {
-        this.clientService = clientService;
+    public ClientController(ClientServiceImpl clientServiceImpl) {
+        this.clientServiceImpl = clientServiceImpl;
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Client>> getClients() {
-        return new ResponseEntity<>(clientService.getClients(), HttpStatus.OK);
+    public ResponseEntity<List<ClientCreateDto>> getClients() {
+        return new ResponseEntity<>(clientServiceImpl.getClients(), HttpStatus.OK);
     }
 
     @GetMapping("/{clientId}")
-    public ResponseEntity<Client> getClient(@PathVariable("clientId") Long clientId) {
-        return new ResponseEntity<>(clientService.getClient(clientId), HttpStatus.OK);
+    public ResponseEntity<ClientGetDto> getClient(@PathVariable("clientId") Long clientId) {
+        return new ResponseEntity<>(clientServiceImpl.getClient(clientId), HttpStatus.OK);
     }
 
     @PostMapping("/")
@@ -39,7 +40,7 @@ public class ClientController {
         if(bindingResult.hasErrors()){
             new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        clientService.addNewClient(client);
+        clientServiceImpl.addNewClient(client);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -50,11 +51,11 @@ public class ClientController {
     }*/
 
     @PatchMapping(path = "{clientId}")
-    public ResponseEntity<Client> patchClientById(@PathVariable("clientId") Long clientId, @Valid @RequestBody ClientPatchDto client, BindingResult bindingResult) {
+    public ResponseEntity<ClientPatchDto> patchClientById(@PathVariable("clientId") Long clientId, @Valid @RequestBody ClientPatchDto client, BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
             new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        clientService.patchClientById(clientId, client);
+        clientServiceImpl.patchClient(clientId, client);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -63,7 +64,7 @@ public class ClientController {
         if(bindingResult.hasErrors()){
             new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        clientService.putClientById(clientId, client);
+        clientServiceImpl.putClient(clientId, client);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+
+import static java.time.temporal.ChronoUnit.DAYS;
+
 @Data
 @Builder
 @AllArgsConstructor
-@RequiredArgsConstructor
-@NoArgsConstructor(force = true)
+@NoArgsConstructor
 @Entity
 @Table
 public class Rental {
@@ -19,14 +21,28 @@ public class Rental {
 
     @ManyToOne
     @JoinColumn(name = "client_Id")
-    private final Client client;
+    private Client client;
+
     @ManyToOne
     @JoinColumn(name = "vehicle_Id")
-    private final Vehicle vehicle;
+
+    private Vehicle vehicle;
+
     private LocalDate rentalStartDate;
+
     private LocalDate rentalEndDate;
+
     private Long totalRentalCost;
 
 
+    public Rental(Client client, Vehicle vehicle) {
+        this.client = client;
+        this.vehicle = vehicle;
+    }
 
+
+    public void setTotalRentalCost(Long totalRentalCost) {
+        long daysBetween = DAYS.between(rentalStartDate, rentalEndDate);
+        this.totalRentalCost = daysBetween * vehicle.getDailyPrice();
+    }
 }

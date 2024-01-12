@@ -20,16 +20,26 @@ public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @OneToMany (fetch = FetchType.EAGER, mappedBy = "client", cascade = CascadeType.ALL)
     private Set<Rental> rentals = new HashSet<>();
+
     private String firstName;
+
     private String lastName;
+
     @Column(unique = true)
+
     private String email;
+
     private LocalDate dateOfBirth;
+
     @Column(unique = true)
+
     private Long nif;
+
     @Column(unique = true)
+
     private Long driverLicense;
 
 

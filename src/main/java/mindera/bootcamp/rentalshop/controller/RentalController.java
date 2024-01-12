@@ -1,8 +1,9 @@
 package mindera.bootcamp.rentalshop.controller;
 
 import mindera.bootcamp.rentalshop.dto.rentalDto.RentalCreateDto;
+import mindera.bootcamp.rentalshop.dto.rentalDto.RentalGetDto;
 import mindera.bootcamp.rentalshop.entity.Rental;
-import mindera.bootcamp.rentalshop.service.RentalService;
+import mindera.bootcamp.rentalshop.service.RentalServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,33 +15,33 @@ import java.util.List;
 @RequestMapping("api/version1/rentals")
 public class RentalController {
 
-    private final RentalService rentalService;
+    private final RentalServiceImpl rentalServiceImpl;
 
     @Autowired
-    public RentalController(RentalService rentalService) {
-        this.rentalService = rentalService;
+    public RentalController(RentalServiceImpl rentalServiceImpl) {
+        this.rentalServiceImpl = rentalServiceImpl;
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Rental>> getRentals() {
-        return new ResponseEntity<>(rentalService.getRentals(), HttpStatus.OK);
+    public ResponseEntity<List<RentalCreateDto>> getRentals() {
+        return new ResponseEntity<>(rentalServiceImpl.getRentals(), HttpStatus.OK);
     }
 
     @GetMapping("/{rentalId}")
-    public ResponseEntity<Rental> getRental(@PathVariable("rentalId") Long rentalId) {
-        return new ResponseEntity<>(rentalService.getRental(rentalId), HttpStatus.OK);
+    public ResponseEntity<RentalGetDto> getRental(@PathVariable("rentalId") Long rentalId) {
+        return new ResponseEntity<>(rentalServiceImpl.getRental(rentalId), HttpStatus.OK);
     }
 
     @PostMapping("/")
     public ResponseEntity<Rental> addNewRental(@RequestBody RentalCreateDto rental) {
-        rentalService.addNewRental(rental);
+        rentalServiceImpl.addNewRental(rental);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @DeleteMapping(path = "{rentalId}")
+/*    @DeleteMapping(path = "{rentalId}")
     public ResponseEntity<Rental> deleteRentalById(@PathVariable("rentalId") Long rentalId) {
-        rentalService.deleteRental(rentalId);
+        rentalServiceImpl.deleteRental(rentalId);
         return new ResponseEntity<>(HttpStatus.OK);
-    }
+    }*/
 
 }

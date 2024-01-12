@@ -1,23 +1,21 @@
 package mindera.bootcamp.rentalshop.converter;
 
 import mindera.bootcamp.rentalshop.dto.rentalDto.RentalCreateDto;
+import mindera.bootcamp.rentalshop.dto.rentalDto.RentalGetDto;
 import mindera.bootcamp.rentalshop.entity.Client;
 import mindera.bootcamp.rentalshop.entity.Rental;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-public class RentalConverter {
+@Mapper(componentModel = "spring")
+public interface RentalConverter {
 
-    public static RentalCreateDto fromEntityToDto(Rental rental){
-        return new RentalCreateDto(
-                rental.getVehicle().getId(),
-                rental.getClient().getId(),
-                rental.getRentalStartDate(),
-                rental.getRentalEndDate()
-        );
-    }
 
-    public static Rental fromDtoToEntity(RentalCreateDto rentalCreateDto){
-        return Rental.builder()
-                .rentalStartDate(rentalCreateDto.rentalStartDate())
-                .rentalEndDate(rentalCreateDto.rentalEndDate()).build();
-    }
+    RentalCreateDto fromEntityToDto(Rental rental);
+
+    Rental fromDtoToEntity(RentalCreateDto rentalCreateDto);
+
+    RentalGetDto fromEntityToGetDto (Rental rental);
+
+    Rental fromEntityToGetDto (RentalGetDto rentalGetDto);
 }

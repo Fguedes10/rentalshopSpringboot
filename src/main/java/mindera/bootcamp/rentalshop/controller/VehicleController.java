@@ -2,10 +2,10 @@ package mindera.bootcamp.rentalshop.controller;
 
 import jakarta.validation.Valid;
 import mindera.bootcamp.rentalshop.dto.vehicleDto.VehicleCreateDto;
+import mindera.bootcamp.rentalshop.dto.vehicleDto.VehicleGetDto;
 import mindera.bootcamp.rentalshop.dto.vehicleDto.VehiclePatchDto;
-import mindera.bootcamp.rentalshop.entity.Client;
 import mindera.bootcamp.rentalshop.entity.Vehicle;
-import mindera.bootcamp.rentalshop.service.VehicleService;
+import mindera.bootcamp.rentalshop.service.VehicleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,25 +18,21 @@ import java.util.List;
 @RequestMapping("api/version1/vehicles")
 public class VehicleController {
 
-    private final VehicleService vehicleService;
+    private final VehicleServiceImpl vehicleServiceImpl;
 
     @Autowired
-    public VehicleController(VehicleService vehicleService) {
-        this.vehicleService = vehicleService;
+    public VehicleController(VehicleServiceImpl vehicleServiceImpl) {
+        this.vehicleServiceImpl = vehicleServiceImpl;
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Vehicle>> getVehicles() {
-        return new ResponseEntity<>(vehicleService.getVehicles(), HttpStatus.OK);
+    public ResponseEntity<List<VehicleCreateDto>> getVehicles() {
+        return new ResponseEntity<>(vehicleServiceImpl.getVehicles(), HttpStatus.OK);
     }
 
     @GetMapping("/{vehicleId}")
-    public ResponseEntity<Vehicle> getVehicle(@Valid @PathVariable("vehicleId") Long vehicleId, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()){
-            new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        vehicleService.getVehicle(vehicleId);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<VehicleGetDto> getVehicle(@PathVariable("vehicleId") Long vehicleId) {
+        return new ResponseEntity<>(vehicleServiceImpl.getVehicleDto(vehicleId), HttpStatus.OK);
     }
 
     @PostMapping("/")
@@ -44,7 +40,7 @@ public class VehicleController {
         if(bindingResult.hasErrors()){
             new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        vehicleService.addNewVehicle(vehicle);
+        vehicleServiceImpl.addNewVehicle(vehicle);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -55,17 +51,17 @@ public class VehicleController {
     }*/
 
     @PatchMapping(path = "{vehicleId}")
-    public ResponseEntity<Vehicle> patchVehicleById(@PathVariable("vehicleId") Long vehicleId, @Valid @RequestBody VehiclePatchDto vehicle, BindingResult bindingResult) {
+    public ResponseEntity<VehiclePatchDto> patchVehicleById(@PathVariable("vehicleId") Long vehicleId, @Valid @RequestBody VehiclePatchDto vehicle, BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
             new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        vehicleService.patchVehicleById(vehicleId, vehicle);
-        return new ResponseEntity<>(HttpStatus.OK);
+        vehicleServiceImpl.patchVehicle(vehicleId, vehicle);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
     @PutMapping(path = "{vehicleId}")
     public ResponseEntity<Vehicle> putVehicleById(@PathVariable("vehicleId") Long vehicleId, @RequestBody Vehicle vehicle) {
-        return new ResponseEntity<>(vehicleService.putVehicleById(vehicleId, vehicle), HttpStatus.OK);
+        return new ResponseEntity<>(vehicleServiceImpl.putVehicle(vehicleId, vehicle), HttpStatus.OK);
     }
 
 }
