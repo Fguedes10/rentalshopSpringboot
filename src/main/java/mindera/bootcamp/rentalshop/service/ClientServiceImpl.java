@@ -35,6 +35,14 @@ public class ClientServiceImpl implements ClientService {
         return clientConverter.fromEntityToClientGetDto(clientOptional.get());
     }
 
+    public Client getClientFromId(Long clientId) {
+        Optional<Client> clientOptional = clientRepository.findById(clientId);
+        if (clientOptional.isEmpty()) {
+            throw new IllegalStateException(Message.CLIENT_WITH_ID + clientId + Message.NOT_EXISTS);
+        }
+        return (clientOptional.get());
+    }
+
     public void addNewClient(ClientCreateDto client) {
         Optional<Client> clientOptional = this.clientRepository.findByEmail(client.email());
         if (clientOptional.isPresent()) {

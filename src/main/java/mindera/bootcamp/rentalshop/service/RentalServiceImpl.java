@@ -47,9 +47,10 @@ public class RentalServiceImpl implements RentalService {
         return rentalConverter.fromEntityToGetDto(rentalOptional.get());
     }
 
+
     public void addNewRental(RentalCreateDto rental) throws VehicleNotFoundException {
-        Vehicle vehicle = vehicleConverter.fromGetDtoToEntity(vehicleServiceImpl.getVehicle(rental.vehicleId()));
-        Client client = clientConverter.fromClientGetDtoToEntity(this.clientServiceImpl.getClient(rental.clientId()));
+        Vehicle vehicle = vehicleServiceImpl.getVehicleFromId(rental.vehicleId());
+        Client client = clientServiceImpl.getClientFromId(rental.clientId());
         Rental newRental = new Rental(client, vehicle);
         newRental.setRentalStartDate(rental.rentalStartDate());
         newRental.setRentalEndDate(rental.rentalEndDate());

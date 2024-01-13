@@ -11,6 +11,8 @@ import org.mapstruct.Mapping;
 public interface RentalConverter {
 
 
+    @Mapping(source = "client.id", target = "clientId")
+    @Mapping(source = "vehicle.id", target = "vehicleId")
     RentalCreateDto fromEntityToDto(Rental rental);
 
     Rental fromDtoToEntity(RentalCreateDto rentalCreateDto);

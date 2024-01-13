@@ -37,6 +37,15 @@ public class VehicleServiceImpl implements VehicleService{
         return vehicleConverter.fromEntityToGetDto(vehicleOptional.get());
     }
 
+    public Vehicle getVehicleFromId(Long vehicleId) throws VehicleNotFoundException {
+        Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
+        if (vehicleOptional.isEmpty()) {
+            throw new VehicleNotFoundException(Message.VEHICLE_WITH_ID + vehicleId + Message.NOT_EXISTS);
+        }
+
+        return vehicleOptional.get();
+    }
+
     @Override
     public VehicleGetDto getVehicleDto(Long vehicleId) {
         Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
