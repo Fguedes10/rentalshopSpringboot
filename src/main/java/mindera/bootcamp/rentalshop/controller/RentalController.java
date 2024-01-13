@@ -1,5 +1,6 @@
 package mindera.bootcamp.rentalshop.controller;
 
+import mindera.bootcamp.rentalshop.Exception.VehicleException.VehicleNotFoundException;
 import mindera.bootcamp.rentalshop.dto.rentalDto.RentalCreateDto;
 import mindera.bootcamp.rentalshop.dto.rentalDto.RentalGetDto;
 import mindera.bootcamp.rentalshop.entity.Rental;
@@ -34,8 +35,12 @@ public class RentalController {
 
     @PostMapping("/")
     public ResponseEntity<Rental> addNewRental(@RequestBody RentalCreateDto rental) {
+        try{
         rentalServiceImpl.addNewRental(rental);
         return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (VehicleNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 /*    @DeleteMapping(path = "{rentalId}")

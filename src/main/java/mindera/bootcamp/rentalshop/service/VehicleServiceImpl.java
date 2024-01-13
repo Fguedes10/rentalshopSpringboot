@@ -1,5 +1,7 @@
 package mindera.bootcamp.rentalshop.service;
 
+import mindera.bootcamp.rentalshop.Exception.VehicleException.VehicleNotFoundException;
+import mindera.bootcamp.rentalshop.Exception.VehicleException.VehiclePlateAlreadyExists;
 import mindera.bootcamp.rentalshop.converter.VehicleConverter;
 import mindera.bootcamp.rentalshop.dto.vehicleDto.VehicleCreateDto;
 import mindera.bootcamp.rentalshop.dto.vehicleDto.VehicleGetDto;
@@ -26,13 +28,15 @@ public class VehicleServiceImpl implements VehicleService{
         return vehicles.stream().map(vehicleConverter::fromEntityToCreateDto).toList();
     }
 
-    public Vehicle getVehicle(Long vehicleId) {
+    public VehicleGetDto getVehicle(Long vehicleId) throws VehicleNotFoundException {
         Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
         if (vehicleOptional.isEmpty()) {
-            throw new IllegalStateException(Message.VEHICLE_WITH_ID + vehicleId + Message.NOT_EXISTS);
+            throw new VehicleNotFoundException(Message.VEHICLE_WITH_ID + vehicleId + Message.NOT_EXISTS);
         }
-        return vehicleOptional.get();
+
+        return vehicleConverter.fromEntityToGetDto(vehicleOptional.get());
     }
+
     @Override
     public VehicleGetDto getVehicleDto(Long vehicleId) {
         Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
@@ -42,10 +46,10 @@ public class VehicleServiceImpl implements VehicleService{
         return vehicleConverter.fromEntityToGetDto(vehicleOptional.get());
     }
 
-    public void addNewVehicle(VehicleCreateDto vehicle) {
+    public void addNewVehicle(VehicleCreateDto vehicle) throws VehiclePlateAlreadyExists {
         Optional<Vehicle> vehicleOptional = vehicleRepository.findByPlateNumber(vehicle.plateNumber());
         if (vehicleOptional.isPresent()) {
-            throw new IllegalStateException(Message.REPEATED_PLATE_ERROR);
+            throw new VehiclePlateAlreadyExists(Message.REPEATED_PLATE_ERROR);
         }
         Vehicle newVehicle = vehicleConverter.fromCreateDtoToEntity(vehicle);
         vehicleRepository.save(newVehicle);
@@ -53,10 +57,10 @@ public class VehicleServiceImpl implements VehicleService{
 
 
     @Override
-    public void patchVehicle(Long vehicleId, VehiclePatchDto vehicle) {
+    public void patchVehicle(Long vehicleId, VehiclePatchDto vehicle) throws VehicleNotFoundException {
         Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
         if (!vehicleOptional.isPresent()) {
-            throw new IllegalStateException(Message.VEHICLE_WITH_ID + vehicleId + Message.NOT_EXISTS);
+            throw new VehicleNotFoundException(Message.VEHICLE_WITH_ID + vehicleId + Message.NOT_EXISTS);
         }
         Vehicle vehicleToPatch = vehicleOptional.get();
         if (vehicle.mileage() != null && !vehicle.mileage().equals(vehicleToPatch.getMileage())) {
@@ -66,11 +70,11 @@ public class VehicleServiceImpl implements VehicleService{
     }
 
     @Override
-    public Vehicle putVehicle(Long vehicleId, Vehicle vehicle) {
+    public Vehicle putVehicle(Long vehicleId, Vehicle vehicle) throws VehicleNotFoundException {
         vehicle.setId(vehicleId);
         Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
         if (vehicleOptional.isEmpty()) {
-            throw new IllegalStateException(Message.VEHICLE_WITH_ID + vehicleId + Message.NOT_EXISTS);
+            throw new VehicleNotFoundException(Message.VEHICLE_WITH_ID + vehicleId + Message.NOT_EXISTS);
         }
         return vehicleRepository.save(vehicle);
     }

@@ -1,5 +1,6 @@
 package mindera.bootcamp.rentalshop.service;
 
+import mindera.bootcamp.rentalshop.Exception.VehicleException.VehicleNotFoundException;
 import mindera.bootcamp.rentalshop.dto.vehicleDto.VehicleCreateDto;
 import mindera.bootcamp.rentalshop.dto.vehicleDto.VehicleGetDto;
 import mindera.bootcamp.rentalshop.dto.vehicleDto.VehiclePatchDto;
@@ -13,7 +14,7 @@ public interface VehicleService {
 
     VehicleGetDto getVehicleDto(Long vehicleId);
 
-    void patchVehicle(Long vehicleId, VehiclePatchDto vehicle);
+    void patchVehicle(Long vehicleId, VehiclePatchDto vehicle) throws VehicleNotFoundException;
 
-    Vehicle putVehicle(Long vehicleId, Vehicle vehicle);
+    Vehicle putVehicle(Long vehicleId, Vehicle vehicle) throws VehicleNotFoundException;
 }

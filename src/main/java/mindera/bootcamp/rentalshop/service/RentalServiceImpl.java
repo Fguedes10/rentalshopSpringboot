@@ -1,9 +1,9 @@
 package mindera.bootcamp.rentalshop.service;
 
+import mindera.bootcamp.rentalshop.Exception.VehicleException.VehicleNotFoundException;
 import mindera.bootcamp.rentalshop.converter.ClientConverter;
 import mindera.bootcamp.rentalshop.converter.RentalConverter;
 import mindera.bootcamp.rentalshop.converter.VehicleConverter;
-import mindera.bootcamp.rentalshop.dto.clientDto.ClientGetDto;
 import mindera.bootcamp.rentalshop.dto.rentalDto.RentalCreateDto;
 import mindera.bootcamp.rentalshop.dto.rentalDto.RentalGetDto;
 import mindera.bootcamp.rentalshop.entity.Client;
@@ -29,6 +29,8 @@ public class RentalServiceImpl implements RentalService {
     private RentalConverter rentalConverter;
     @Autowired
     private ClientConverter clientConverter;
+    @Autowired
+    private VehicleConverter vehicleConverter;
 
     @Override
     public List<RentalCreateDto> getRentals() {
@@ -45,8 +47,8 @@ public class RentalServiceImpl implements RentalService {
         return rentalConverter.fromEntityToGetDto(rentalOptional.get());
     }
 
-    public void addNewRental(RentalCreateDto rental) {
-        Vehicle vehicle = this.vehicleServiceImpl.getVehicle(rental.vehicleId());
+    public void addNewRental(RentalCreateDto rental) throws VehicleNotFoundException {
+        Vehicle vehicle = vehicleConverter.fromGetDtoToEntity(vehicleServiceImpl.getVehicle(rental.vehicleId()));
         Client client = clientConverter.fromClientGetDtoToEntity(this.clientServiceImpl.getClient(rental.clientId()));
         Rental newRental = new Rental(client, vehicle);
         newRental.setRentalStartDate(rental.rentalStartDate());

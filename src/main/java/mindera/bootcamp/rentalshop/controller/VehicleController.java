@@ -1,6 +1,8 @@
 package mindera.bootcamp.rentalshop.controller;
 
 import jakarta.validation.Valid;
+import mindera.bootcamp.rentalshop.Exception.VehicleException.VehicleNotFoundException;
+import mindera.bootcamp.rentalshop.Exception.VehicleException.VehiclePlateAlreadyExists;
 import mindera.bootcamp.rentalshop.dto.vehicleDto.VehicleCreateDto;
 import mindera.bootcamp.rentalshop.dto.vehicleDto.VehicleGetDto;
 import mindera.bootcamp.rentalshop.dto.vehicleDto.VehiclePatchDto;
@@ -32,7 +34,7 @@ public class VehicleController {
 
     @GetMapping("/{vehicleId}")
     public ResponseEntity<VehicleGetDto> getVehicle(@PathVariable("vehicleId") Long vehicleId) {
-        return new ResponseEntity<>(vehicleServiceImpl.getVehicleDto(vehicleId), HttpStatus.OK);
+            return new ResponseEntity<>(vehicleServiceImpl.getVehicleDto(vehicleId), HttpStatus.OK);
     }
 
     @PostMapping("/")
@@ -40,8 +42,12 @@ public class VehicleController {
         if(bindingResult.hasErrors()){
             new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        try{
         vehicleServiceImpl.addNewVehicle(vehicle);
         return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (VehiclePlateAlreadyExists e){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
 /*    @DeleteMapping(path = "{vehicleId}")
@@ -55,13 +61,22 @@ public class VehicleController {
         if(bindingResult.hasErrors()){
             new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        vehicleServiceImpl.patchVehicle(vehicleId, vehicle);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        try{
+            vehicleServiceImpl.patchVehicle(vehicleId, vehicle);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } catch (VehicleNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @PutMapping(path = "{vehicleId}")
     public ResponseEntity<Vehicle> putVehicleById(@PathVariable("vehicleId") Long vehicleId, @RequestBody Vehicle vehicle) {
+        try{
         return new ResponseEntity<>(vehicleServiceImpl.putVehicle(vehicleId, vehicle), HttpStatus.OK);
+        } catch (VehicleNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 }
