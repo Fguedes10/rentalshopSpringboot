@@ -28,13 +28,17 @@ public class VehicleController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<VehicleCreateDto>> getVehicles() {
+    public ResponseEntity<List<VehicleGetDto>> getVehicles() {
         return new ResponseEntity<>(vehicleServiceImpl.getVehicles(), HttpStatus.OK);
     }
 
     @GetMapping("/{vehicleId}")
     public ResponseEntity<VehicleGetDto> getVehicle(@PathVariable("vehicleId") Long vehicleId) {
+        try{
             return new ResponseEntity<>(vehicleServiceImpl.getVehicleDto(vehicleId), HttpStatus.OK);
+        } catch (VehicleNotFoundException e){
+            return new ResponseEntity<>((HttpStatus.NOT_FOUND));
+        }
     }
 
     @PostMapping("/")

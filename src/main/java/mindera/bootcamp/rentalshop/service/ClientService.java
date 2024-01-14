@@ -1,5 +1,6 @@
 package mindera.bootcamp.rentalshop.service;
 
+import mindera.bootcamp.rentalshop.Exception.ClientException.ClientNotFoundException;
 import mindera.bootcamp.rentalshop.dto.clientDto.ClientCreateDto;
 import mindera.bootcamp.rentalshop.dto.clientDto.ClientGetDto;
 import mindera.bootcamp.rentalshop.dto.clientDto.ClientPatchDto;
@@ -11,7 +12,7 @@ public interface ClientService {
 
     List<ClientCreateDto> getClients();
 
-    ClientGetDto getClient(Long clientId);
+    ClientGetDto getClient(Long clientId) throws ClientNotFoundException;
 
     void patchClient(Long clientId, ClientPatchDto client);
 

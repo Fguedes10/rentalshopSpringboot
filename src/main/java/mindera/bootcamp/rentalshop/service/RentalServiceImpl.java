@@ -1,5 +1,6 @@
 package mindera.bootcamp.rentalshop.service;
 
+import mindera.bootcamp.rentalshop.Exception.ClientException.ClientNotFoundException;
 import mindera.bootcamp.rentalshop.Exception.VehicleException.VehicleNotFoundException;
 import mindera.bootcamp.rentalshop.converter.ClientConverter;
 import mindera.bootcamp.rentalshop.converter.RentalConverter;
@@ -48,7 +49,7 @@ public class RentalServiceImpl implements RentalService {
     }
 
 
-    public void addNewRental(RentalCreateDto rental) throws VehicleNotFoundException {
+    public void addNewRental(RentalCreateDto rental) throws VehicleNotFoundException, ClientNotFoundException {
         Vehicle vehicle = vehicleServiceImpl.getVehicleFromId(rental.vehicleId());
         Client client = clientServiceImpl.getClientFromId(rental.clientId());
         Rental newRental = new Rental(client, vehicle);

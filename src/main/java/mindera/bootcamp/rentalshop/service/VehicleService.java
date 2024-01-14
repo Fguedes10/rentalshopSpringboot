@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface VehicleService {
 
-    List<VehicleCreateDto> getVehicles();
+    List<VehicleGetDto> getVehicles();
 
-    VehicleGetDto getVehicleDto(Long vehicleId);
+    VehicleGetDto getVehicleDto(Long vehicleId) throws VehicleNotFoundException;
 
     void patchVehicle(Long vehicleId, VehiclePatchDto vehicle) throws VehicleNotFoundException;
 

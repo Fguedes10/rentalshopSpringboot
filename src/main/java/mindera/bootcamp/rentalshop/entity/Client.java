@@ -42,5 +42,70 @@ public class Client {
 
     private Long driverLicense;
 
+    public Client() {
+    }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Set<Rental> getRentals() {
+        return rentals;
+    }
+
+    public void setRentals(Set<Rental> rentals) {
+        this.rentals = rentals;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public Long getNif() {
+        return nif;
+    }
+
+    public void setNif(Long nif) {
+        this.nif = nif;
+    }
+
+    public Long getDriverLicense() {
+        return driverLicense;
+    }
+
+    public void setDriverLicense(Long driverLicense) {
+        this.driverLicense = driverLicense;
+    }
 }

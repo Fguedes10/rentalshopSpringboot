@@ -23,12 +23,13 @@ public class VehicleServiceImpl implements VehicleService{
     private VehicleConverter vehicleConverter;
 
 @Override
-    public List<VehicleCreateDto> getVehicles() {
+    public List<VehicleGetDto> getVehicles() {
         List<Vehicle> vehicles = vehicleRepository.findAll();
-        return vehicles.stream().map(vehicleConverter::fromEntityToCreateDto).toList();
+        return vehicles.stream().map(vehicleConverter::fromEntityToGetDto).toList();
     }
 
-    public VehicleGetDto getVehicle(Long vehicleId) throws VehicleNotFoundException {
+    @Override
+    public VehicleGetDto getVehicleDto(Long vehicleId) throws VehicleNotFoundException {
         Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
         if (vehicleOptional.isEmpty()) {
             throw new VehicleNotFoundException(Message.VEHICLE_WITH_ID + vehicleId + Message.NOT_EXISTS);
@@ -46,14 +47,6 @@ public class VehicleServiceImpl implements VehicleService{
         return vehicleOptional.get();
     }
 
-    @Override
-    public VehicleGetDto getVehicleDto(Long vehicleId) {
-        Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
-        if (vehicleOptional.isEmpty()) {
-            throw new IllegalStateException(Message.VEHICLE_WITH_ID + vehicleId + Message.NOT_EXISTS);
-        }
-        return vehicleConverter.fromEntityToGetDto(vehicleOptional.get());
-    }
 
     public void addNewVehicle(VehicleCreateDto vehicle) throws VehiclePlateAlreadyExists {
         Optional<Vehicle> vehicleOptional = vehicleRepository.findByPlateNumber(vehicle.plateNumber());

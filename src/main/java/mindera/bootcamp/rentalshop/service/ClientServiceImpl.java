@@ -1,5 +1,7 @@
 package mindera.bootcamp.rentalshop.service;
 
+import mindera.bootcamp.rentalshop.Exception.ClientException.ClientAlreadyExistsException;
+import mindera.bootcamp.rentalshop.Exception.ClientException.ClientNotFoundException;
 import mindera.bootcamp.rentalshop.converter.ClientConverter;
 import mindera.bootcamp.rentalshop.dto.clientDto.ClientCreateDto;
 import mindera.bootcamp.rentalshop.dto.clientDto.ClientGetDto;
@@ -27,26 +29,26 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientGetDto getClient(Long clientId) {
+    public ClientGetDto getClient(Long clientId) throws ClientNotFoundException {
         Optional<Client> clientOptional = clientRepository.findById(clientId);
         if (clientOptional.isEmpty()) {
-            throw new IllegalStateException(Message.CLIENT_WITH_ID + clientId + Message.NOT_EXISTS);
+            throw new ClientNotFoundException(Message.CLIENT_WITH_ID + clientId + Message.NOT_EXISTS);
         }
         return clientConverter.fromEntityToClientGetDto(clientOptional.get());
     }
 
-    public Client getClientFromId(Long clientId) {
+    public Client getClientFromId(Long clientId) throws ClientNotFoundException {
         Optional<Client> clientOptional = clientRepository.findById(clientId);
         if (clientOptional.isEmpty()) {
-            throw new IllegalStateException(Message.CLIENT_WITH_ID + clientId + Message.NOT_EXISTS);
+            throw new ClientNotFoundException(Message.CLIENT_WITH_ID + clientId + Message.NOT_EXISTS);
         }
         return (clientOptional.get());
     }
 
-    public void addNewClient(ClientCreateDto client) {
+    public void addNewClient(ClientCreateDto client) throws ClientAlreadyExistsException {
         Optional<Client> clientOptional = this.clientRepository.findByEmail(client.email());
         if (clientOptional.isPresent()) {
-            throw new IllegalStateException(Message.REPEATED_EMAIL_ERROR);
+            throw new ClientAlreadyExistsException(Message.REPEATED_EMAIL_ERROR);
         }
         Client clientToSave = clientConverter.fromClientCreateDtoToEntity(client);
         clientRepository.save(clientToSave);
@@ -61,10 +63,10 @@ public class ClientServiceImpl implements ClientService {
             clientRepository.delete(deletedClient.get());
         }*/
     @Override
-    public void patchClient(Long clientId, ClientPatchDto client) {
+    public void patchClient(Long clientId, ClientPatchDto client) throws ClientNotFoundException {
         Optional<Client> clientOptional = clientRepository.findById(clientId);
         if (!clientOptional.isPresent()) {
-            throw new IllegalStateException(Message.CLIENT_WITH_ID + clientId + Message.NOT_EXISTS);
+            throw new ClientNotFoundException(Message.CLIENT_WITH_ID + clientId + Message.NOT_EXISTS);
         }
         Client clientToPatch = clientOptional.get();
         if (client.firstName() != null && !client.firstName().isEmpty() && !client.firstName().equals(clientToPatch.getFirstName())) {

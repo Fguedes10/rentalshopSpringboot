@@ -15,9 +15,8 @@ public interface RentalConverter {
     @Mapping(source = "vehicle.id", target = "vehicleId")
     RentalCreateDto fromEntityToDto(Rental rental);
 
-    Rental fromDtoToEntity(RentalCreateDto rentalCreateDto);
+
 
     RentalGetDto fromEntityToGetDto (Rental rental);
 
-    Rental fromEntityToGetDto (RentalGetDto rentalGetDto);
 }

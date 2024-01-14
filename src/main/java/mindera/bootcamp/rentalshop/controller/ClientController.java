@@ -1,6 +1,8 @@
 package mindera.bootcamp.rentalshop.controller;
 
 import jakarta.validation.Valid;
+import mindera.bootcamp.rentalshop.Exception.ClientException.ClientAlreadyExistsException;
+import mindera.bootcamp.rentalshop.Exception.ClientException.ClientNotFoundException;
 import mindera.bootcamp.rentalshop.dto.clientDto.ClientCreateDto;
 import mindera.bootcamp.rentalshop.dto.clientDto.ClientGetDto;
 import mindera.bootcamp.rentalshop.dto.clientDto.ClientPatchDto;
@@ -32,7 +34,11 @@ public class ClientController {
 
     @GetMapping("/{clientId}")
     public ResponseEntity<ClientGetDto> getClient(@PathVariable("clientId") Long clientId) {
+        try{
         return new ResponseEntity<>(clientServiceImpl.getClient(clientId), HttpStatus.OK);
+        } catch (ClientNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/")
@@ -40,8 +46,12 @@ public class ClientController {
         if(bindingResult.hasErrors()){
             new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        try{
         clientServiceImpl.addNewClient(client);
         return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (ClientAlreadyExistsException e){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
 /*    @DeleteMapping(path = "{clientId}")
@@ -55,8 +65,12 @@ public class ClientController {
         if(bindingResult.hasErrors()){
             new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        try{
         clientServiceImpl.patchClient(clientId, client);
         return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ClientNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping(path = "{clientId}")
