@@ -1,22 +1,20 @@
-package mindera.bootcamp.rentalshop.converter;
+package mindera.bootcamp.rentalshop.mapper;
 
 import mindera.bootcamp.rentalshop.dto.clientDto.ClientCreateDto;
 import mindera.bootcamp.rentalshop.dto.clientDto.ClientGetDto;
 import mindera.bootcamp.rentalshop.entity.Client;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring")
-public interface ClientConverter {
+@Mapper
+public interface ClientMapper {
 
+    ClientMapper INSTANCE = Mappers.getMapper(ClientMapper.class);
 
     ClientCreateDto fromEntityToClientCreateDto(Client client);
 
     Client fromClientCreateDtoToEntity(ClientCreateDto clientCreateDto);
 
     ClientGetDto fromEntityToClientGetDto(Client client);
-
-    Client fromClientGetDtoToEntity(ClientGetDto clientGetDto);
-
 
 }

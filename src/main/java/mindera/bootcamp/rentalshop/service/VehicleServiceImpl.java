@@ -2,11 +2,11 @@ package mindera.bootcamp.rentalshop.service;
 
 import mindera.bootcamp.rentalshop.Exception.VehicleException.VehicleNotFoundException;
 import mindera.bootcamp.rentalshop.Exception.VehicleException.VehiclePlateAlreadyExists;
-import mindera.bootcamp.rentalshop.converter.VehicleConverter;
 import mindera.bootcamp.rentalshop.dto.vehicleDto.VehicleCreateDto;
 import mindera.bootcamp.rentalshop.dto.vehicleDto.VehicleGetDto;
 import mindera.bootcamp.rentalshop.dto.vehicleDto.VehiclePatchDto;
 import mindera.bootcamp.rentalshop.entity.Vehicle;
+import mindera.bootcamp.rentalshop.mapper.VehicleMapper;
 import mindera.bootcamp.rentalshop.repository.VehicleRepository;
 import mindera.bootcamp.rentalshop.utilMessages.Message;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +19,11 @@ import java.util.Optional;
 public class VehicleServiceImpl implements VehicleService{
     @Autowired
     private VehicleRepository vehicleRepository;
-    @Autowired
-    private VehicleConverter vehicleConverter;
 
-@Override
+    @Override
     public List<VehicleGetDto> getVehicles() {
         List<Vehicle> vehicles = vehicleRepository.findAll();
-        return vehicles.stream().map(vehicleConverter::fromEntityToGetDto).toList();
+        return vehicles.stream().map(VehicleMapper.INSTANCE::fromEntityToGetDto).toList();
     }
 
     @Override
@@ -35,7 +33,7 @@ public class VehicleServiceImpl implements VehicleService{
             throw new VehicleNotFoundException(Message.VEHICLE_WITH_ID + vehicleId + Message.NOT_EXISTS);
         }
 
-        return vehicleConverter.fromEntityToGetDto(vehicleOptional.get());
+        return VehicleMapper.INSTANCE.fromEntityToGetDto(vehicleOptional.get());
     }
 
     public Vehicle getVehicleFromId(Long vehicleId) throws VehicleNotFoundException {
@@ -53,7 +51,7 @@ public class VehicleServiceImpl implements VehicleService{
         if (vehicleOptional.isPresent()) {
             throw new VehiclePlateAlreadyExists(Message.REPEATED_PLATE_ERROR);
         }
-        Vehicle newVehicle = vehicleConverter.fromCreateDtoToEntity(vehicle);
+        Vehicle newVehicle = VehicleMapper.INSTANCE.fromCreateDtoToEntity(vehicle);
         vehicleRepository.save(newVehicle);
     }
 

@@ -2,11 +2,11 @@ package mindera.bootcamp.rentalshop.service;
 
 import mindera.bootcamp.rentalshop.Exception.ClientException.ClientAlreadyExistsException;
 import mindera.bootcamp.rentalshop.Exception.ClientException.ClientNotFoundException;
-import mindera.bootcamp.rentalshop.converter.ClientConverter;
 import mindera.bootcamp.rentalshop.dto.clientDto.ClientCreateDto;
 import mindera.bootcamp.rentalshop.dto.clientDto.ClientGetDto;
 import mindera.bootcamp.rentalshop.dto.clientDto.ClientPatchDto;
 import mindera.bootcamp.rentalshop.entity.Client;
+import mindera.bootcamp.rentalshop.mapper.ClientMapper;
 import mindera.bootcamp.rentalshop.repository.ClientRepository;
 import mindera.bootcamp.rentalshop.utilMessages.Message;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +19,12 @@ import java.util.Optional;
 public class ClientServiceImpl implements ClientService {
     @Autowired
     private ClientRepository clientRepository;
-    @Autowired
-    private ClientConverter clientConverter;
+
 
     @Override
     public List<ClientCreateDto> getClients() {
         List<Client> clients = clientRepository.findAll();
-        return clients.stream().map(clientConverter::fromEntityToClientCreateDto).toList();
+        return clients.stream().map(ClientMapper.INSTANCE::fromEntityToClientCreateDto).toList();
     }
 
     @Override
@@ -34,7 +33,7 @@ public class ClientServiceImpl implements ClientService {
         if (clientOptional.isEmpty()) {
             throw new ClientNotFoundException(Message.CLIENT_WITH_ID + clientId + Message.NOT_EXISTS);
         }
-        return clientConverter.fromEntityToClientGetDto(clientOptional.get());
+        return ClientMapper.INSTANCE.fromEntityToClientGetDto(clientOptional.get());
     }
 
     public Client getClientFromId(Long clientId) throws ClientNotFoundException {
@@ -50,7 +49,7 @@ public class ClientServiceImpl implements ClientService {
         if (clientOptional.isPresent()) {
             throw new ClientAlreadyExistsException(Message.REPEATED_EMAIL_ERROR);
         }
-        Client clientToSave = clientConverter.fromClientCreateDtoToEntity(client);
+        Client clientToSave = ClientMapper.INSTANCE.fromClientCreateDtoToEntity(client);
         clientRepository.save(clientToSave);
     }
 
