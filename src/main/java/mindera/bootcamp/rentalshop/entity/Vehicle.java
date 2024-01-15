@@ -6,7 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -20,12 +22,11 @@ public class Vehicle {
     private Long id;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "vehicle", cascade = CascadeType.ALL)
 
-    private List<Rental> rentals;
+    private Set<Rental> rentals = new HashSet<>();
 
     private String brand;
 
     @Column(unique = true)
-
     private String plateNumber;
 
     private String color;
@@ -55,11 +56,11 @@ public class Vehicle {
         this.id = id;
     }
 
-    public List<Rental> getRentals() {
+    public Set<Rental> getRentals() {
         return rentals;
     }
 
-    public void setRentals(List<Rental> rentals) {
+    public void setRentals(Set<Rental> rentals) {
         this.rentals = rentals;
     }
 

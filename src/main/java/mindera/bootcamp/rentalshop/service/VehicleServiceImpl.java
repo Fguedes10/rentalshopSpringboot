@@ -61,7 +61,7 @@ public class VehicleServiceImpl implements VehicleService{
     @Override
     public void patchVehicle(Long vehicleId, VehiclePatchDto vehicle) throws VehicleNotFoundException {
         Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
-        if (!vehicleOptional.isPresent()) {
+        if (vehicleOptional.isEmpty()) {
             throw new VehicleNotFoundException(Message.VEHICLE_WITH_ID + vehicleId + Message.NOT_EXISTS);
         }
         Vehicle vehicleToPatch = vehicleOptional.get();

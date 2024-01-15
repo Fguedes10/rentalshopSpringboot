@@ -17,18 +17,18 @@ public class Message {
     public static final String INVALID_DAILY_PRICE = "Please input a Daily Price";
 
 
-    //CLIENTSERVICE MESSAGES
+    //CLIENTSERVICEIMPL MESSAGES
 
     public static final String CLIENT_WITH_ID = "The client with id ";
     public static final String NOT_EXISTS = " does not exist";
     public static final String REPEATED_EMAIL_ERROR = "A client with these email already exists.";
 
-    //VEHICLESERVICE MESSAGES
+    //VEHICLESERVICEIMPL MESSAGES
 
     public static final String VEHICLE_WITH_ID = "The vehicle with id ";
     public static final String REPEATED_PLATE_ERROR = "A vehicle with these plate number already exists.";
 
-    //RENTALSERVICE MESSAGES
+    //RENTALSERVICEIMPL MESSAGES
     public static final String RENTAL_WITH_ID = "The rental with id ";
     public static final String ALREADY_RENTED = "This vehicle is currently rented.";
 
@@ -47,9 +47,24 @@ public class Message {
     public static final String INVALID_DRIVERLICENSE = "Please input a valid Driver License number";
 
 
-    // CLIENTPATHDTO
+    // CLIENTPATCHDTO
 
     public static final String INVALID_FIRSTNAME = "Please input a valid First Name";
     public static final String INVALID_LASTNAME = "Please input a valid First Name";
+
+
+
+    //RENTALPATCHDTO
+
+    public static final String INVALID_END_DATE = "Please input a valid End Date";
+
+
+
+    //RENTALCREATEDTO
+
+    public static final String INVALID_VEHICLE_ID = "Please input a valid Vehicle Id";
+    public static final String INVALID_CLIENT_ID = "Please input a valid Client Id";
+    public static final String INVALID_START_DATE = "Please input a Start Date";
+
 
 }

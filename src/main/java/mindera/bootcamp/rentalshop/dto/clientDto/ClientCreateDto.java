@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 public record ClientCreateDto(
 
+
         @NotNull(message = Message.BLANK_FIRSTNAME)
         String firstName,
         @NotNull(message = Message.BLANK_LASTNAME)

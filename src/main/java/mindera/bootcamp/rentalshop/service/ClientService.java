@@ -14,7 +14,7 @@ public interface ClientService {
 
     ClientGetDto getClient(Long clientId) throws ClientNotFoundException;
 
-    void patchClient(Long clientId, ClientPatchDto client);
+    void patchClient(Long clientId, ClientPatchDto client) throws ClientNotFoundException;
 
     void putClient(Long clientId, Client client);
 }

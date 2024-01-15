@@ -19,13 +19,9 @@ import java.util.List;
 @RestController
 @RequestMapping("api/version1/vehicles")
 public class VehicleController {
-
-    private final VehicleServiceImpl vehicleServiceImpl;
-
     @Autowired
-    public VehicleController(VehicleServiceImpl vehicleServiceImpl) {
-        this.vehicleServiceImpl = vehicleServiceImpl;
-    }
+    private VehicleServiceImpl vehicleServiceImpl;
+
 
     @GetMapping("/")
     public ResponseEntity<List<VehicleGetDto>> getVehicles() {
@@ -34,22 +30,22 @@ public class VehicleController {
 
     @GetMapping("/{vehicleId}")
     public ResponseEntity<VehicleGetDto> getVehicle(@PathVariable("vehicleId") Long vehicleId) {
-        try{
+        try {
             return new ResponseEntity<>(vehicleServiceImpl.getVehicleDto(vehicleId), HttpStatus.OK);
-        } catch (VehicleNotFoundException e){
+        } catch (VehicleNotFoundException e) {
             return new ResponseEntity<>((HttpStatus.NOT_FOUND));
         }
     }
 
     @PostMapping("/")
     public ResponseEntity<Vehicle> addNewVehicle(@Valid @RequestBody VehicleCreateDto vehicle, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        try{
-        vehicleServiceImpl.addNewVehicle(vehicle);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (VehiclePlateAlreadyExists e){
+        try {
+            vehicleServiceImpl.addNewVehicle(vehicle);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (VehiclePlateAlreadyExists e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
@@ -62,13 +58,13 @@ public class VehicleController {
 
     @PatchMapping(path = "{vehicleId}")
     public ResponseEntity<VehiclePatchDto> patchVehicleById(@PathVariable("vehicleId") Long vehicleId, @Valid @RequestBody VehiclePatchDto vehicle, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        try{
+        try {
             vehicleServiceImpl.patchVehicle(vehicleId, vehicle);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
-        } catch (VehicleNotFoundException e){
+        } catch (VehicleNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -76,9 +72,9 @@ public class VehicleController {
 
     @PutMapping(path = "{vehicleId}")
     public ResponseEntity<Vehicle> putVehicleById(@PathVariable("vehicleId") Long vehicleId, @RequestBody Vehicle vehicle) {
-        try{
-        return new ResponseEntity<>(vehicleServiceImpl.putVehicle(vehicleId, vehicle), HttpStatus.OK);
-        } catch (VehicleNotFoundException e){
+        try {
+            return new ResponseEntity<>(vehicleServiceImpl.putVehicle(vehicleId, vehicle), HttpStatus.OK);
+        } catch (VehicleNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

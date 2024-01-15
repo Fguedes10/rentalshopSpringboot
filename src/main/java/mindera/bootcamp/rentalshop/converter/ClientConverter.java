@@ -12,13 +12,9 @@ public interface ClientConverter {
 
     ClientCreateDto fromEntityToClientCreateDto(Client client);
 
-
     Client fromClientCreateDtoToEntity(ClientCreateDto clientCreateDto);
 
-
-
     ClientGetDto fromEntityToClientGetDto(Client client);
-
 
     Client fromClientGetDtoToEntity(ClientGetDto clientGetDto);
 

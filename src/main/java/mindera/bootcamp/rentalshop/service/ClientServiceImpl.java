@@ -65,7 +65,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void patchClient(Long clientId, ClientPatchDto client) throws ClientNotFoundException {
         Optional<Client> clientOptional = clientRepository.findById(clientId);
-        if (!clientOptional.isPresent()) {
+        if (clientOptional.isEmpty()) {
             throw new ClientNotFoundException(Message.CLIENT_WITH_ID + clientId + Message.NOT_EXISTS);
         }
         Client clientToPatch = clientOptional.get();

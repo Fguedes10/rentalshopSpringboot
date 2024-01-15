@@ -1,8 +1,12 @@
 package mindera.bootcamp.rentalshop.controller;
 
+import jakarta.validation.Valid;
+import mindera.bootcamp.rentalshop.Exception.ClientException.ClientNotFoundException;
+import mindera.bootcamp.rentalshop.Exception.RentalException.RentalNotFoundException;
 import mindera.bootcamp.rentalshop.Exception.VehicleException.VehicleNotFoundException;
 import mindera.bootcamp.rentalshop.dto.rentalDto.RentalCreateDto;
 import mindera.bootcamp.rentalshop.dto.rentalDto.RentalGetDto;
+import mindera.bootcamp.rentalshop.dto.rentalDto.RentalPatchDto;
 import mindera.bootcamp.rentalshop.entity.Rental;
 import mindera.bootcamp.rentalshop.service.RentalServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +19,9 @@ import java.util.List;
 @RestController
 @RequestMapping("api/version1/rentals")
 public class RentalController {
-
-    private final RentalServiceImpl rentalServiceImpl;
-
     @Autowired
-    public RentalController(RentalServiceImpl rentalServiceImpl) {
-        this.rentalServiceImpl = rentalServiceImpl;
-    }
+    private RentalServiceImpl rentalServiceImpl;
+
 
     @GetMapping("/")
     public ResponseEntity<List<RentalCreateDto>> getRentals() {
@@ -30,15 +30,30 @@ public class RentalController {
 
     @GetMapping("/{rentalId}")
     public ResponseEntity<RentalGetDto> getRental(@PathVariable("rentalId") Long rentalId) {
+        try{
         return new ResponseEntity<>(rentalServiceImpl.getRental(rentalId), HttpStatus.OK);
+        } catch (RentalNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/")
     public ResponseEntity<Rental> addNewRental(@RequestBody RentalCreateDto rental) {
-        try{
-        rentalServiceImpl.addNewRental(rental);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (VehicleNotFoundException e){
+        try {
+            rentalServiceImpl.addNewRental(rental);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (VehicleNotFoundException | ClientNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PatchMapping("/{rentalId}")
+    public ResponseEntity<RentalPatchDto> patchRental(@PathVariable("rentalId") Long rentalId,
+                                                      @Valid @RequestBody RentalPatchDto rental) {
+        try {
+            rentalServiceImpl.patchRental(rentalId, rental);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } catch (RentalNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

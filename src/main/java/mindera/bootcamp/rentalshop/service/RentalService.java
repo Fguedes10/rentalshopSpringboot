@@ -1,5 +1,6 @@
 package mindera.bootcamp.rentalshop.service;
 
+import mindera.bootcamp.rentalshop.Exception.RentalException.RentalNotFoundException;
 import mindera.bootcamp.rentalshop.dto.rentalDto.RentalCreateDto;
 import mindera.bootcamp.rentalshop.dto.rentalDto.RentalGetDto;
 
@@ -9,7 +10,7 @@ public interface RentalService {
 
 
     List<RentalCreateDto> getRentals();
-    RentalGetDto getRental(Long rentalId);
+    RentalGetDto getRental(Long rentalId) throws RentalNotFoundException;
 
 
 }

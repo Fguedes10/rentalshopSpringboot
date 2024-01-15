@@ -2,12 +2,12 @@ package mindera.bootcamp.rentalshop.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 import static java.time.temporal.ChronoUnit.DAYS;
-
 
 @AllArgsConstructor
 @Entity
@@ -24,7 +24,6 @@ public class Rental {
 
     @ManyToOne
     @JoinColumn(name = "vehicle_Id")
-
     private Vehicle vehicle;
 
     private LocalDate rentalStartDate;
@@ -36,15 +35,18 @@ public class Rental {
     public Rental() {
     }
 
-    public Rental(Client client, Vehicle vehicle) {
+    public Rental(Client client, Vehicle vehicle, LocalDate rentalStartDate, LocalDate rentalEndDate) {
         this.client = client;
         this.vehicle = vehicle;
+        this.rentalStartDate = rentalStartDate;
+        this.rentalEndDate = rentalEndDate;
+        setTotalRentalCost();
     }
 
 
-    public void setTotalRentalCost(Long totalRentalCost) {
-        long daysBetween = DAYS.between(rentalStartDate, rentalEndDate);
-        this.totalRentalCost = daysBetween * vehicle.getDailyPrice();
+    public void setTotalRentalCost() {
+        Long totalDays = rentalStartDate.until(rentalEndDate, DAYS);
+        this.totalRentalCost = totalDays * vehicle.getDailyPrice();
     }
 
     public Long getId() {

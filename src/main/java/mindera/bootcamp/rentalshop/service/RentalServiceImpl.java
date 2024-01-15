@@ -1,12 +1,14 @@
 package mindera.bootcamp.rentalshop.service;
 
 import mindera.bootcamp.rentalshop.Exception.ClientException.ClientNotFoundException;
+import mindera.bootcamp.rentalshop.Exception.RentalException.RentalNotFoundException;
 import mindera.bootcamp.rentalshop.Exception.VehicleException.VehicleNotFoundException;
 import mindera.bootcamp.rentalshop.converter.ClientConverter;
 import mindera.bootcamp.rentalshop.converter.RentalConverter;
 import mindera.bootcamp.rentalshop.converter.VehicleConverter;
 import mindera.bootcamp.rentalshop.dto.rentalDto.RentalCreateDto;
 import mindera.bootcamp.rentalshop.dto.rentalDto.RentalGetDto;
+import mindera.bootcamp.rentalshop.dto.rentalDto.RentalPatchDto;
 import mindera.bootcamp.rentalshop.entity.Client;
 import mindera.bootcamp.rentalshop.entity.Rental;
 import mindera.bootcamp.rentalshop.entity.Vehicle;
@@ -15,6 +17,7 @@ import mindera.bootcamp.rentalshop.utilMessages.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,10 +43,10 @@ public class RentalServiceImpl implements RentalService {
     }
 
     @Override
-    public RentalGetDto getRental(Long rentalId) {
+    public RentalGetDto getRental(Long rentalId) throws RentalNotFoundException {
         Optional<Rental> rentalOptional = rentalRepository.findById(rentalId);
         if (rentalOptional.isEmpty()) {
-            throw new IllegalStateException(Message.RENTAL_WITH_ID + rentalId + Message.NOT_EXISTS);
+            throw new RentalNotFoundException(Message.RENTAL_WITH_ID + rentalId + Message.NOT_EXISTS);
         }
         return rentalConverter.fromEntityToGetDto(rentalOptional.get());
     }
@@ -52,10 +55,23 @@ public class RentalServiceImpl implements RentalService {
     public void addNewRental(RentalCreateDto rental) throws VehicleNotFoundException, ClientNotFoundException {
         Vehicle vehicle = vehicleServiceImpl.getVehicleFromId(rental.vehicleId());
         Client client = clientServiceImpl.getClientFromId(rental.clientId());
-        Rental newRental = new Rental(client, vehicle);
-        newRental.setRentalStartDate(rental.rentalStartDate());
-        newRental.setRentalEndDate(rental.rentalEndDate());
+
+        LocalDate startRental = rental.rentalStartDate();
+        LocalDate endRental = rental.rentalEndDate();
+        Rental newRental = new Rental(client, vehicle,startRental, endRental);
         rentalRepository.save(newRental);
+    }
+
+    public void patchRental(Long rentalId, RentalPatchDto rental) throws RentalNotFoundException {
+        Optional<Rental> rentalOptional = rentalRepository.findById(rentalId);
+        if (rentalOptional.isEmpty()){
+            throw  new RentalNotFoundException(Message.RENTAL_WITH_ID + rentalId + Message.NOT_EXISTS);
+        }
+        Rental rentalToPatch = rentalOptional.get();
+        if(rental.rentalEndDate() != null && !rental.rentalEndDate().equals(rentalToPatch.getRentalEndDate())){
+            rentalToPatch.setRentalEndDate(rental.rentalEndDate());
+        }
+        rentalRepository.save(rentalToPatch);
     }
 
 /*    public void deleteRental(Long rentalId) {
