@@ -63,7 +63,7 @@ public class VehicleServiceImpl implements VehicleService{
             throw new VehicleNotFoundException(Message.VEHICLE_WITH_ID + vehicleId + Message.NOT_EXISTS);
         }
         Vehicle vehicleToPatch = vehicleOptional.get();
-        if (vehicle.mileage() != null && !vehicle.mileage().equals(vehicleToPatch.getMileage())) {
+        if (vehicle.mileage() != null && vehicle.mileage() > 0 && vehicle.mileage() > vehicleToPatch.getMileage() && !vehicle.mileage().equals(vehicleToPatch.getMileage())) {
             vehicleToPatch.setMileage(vehicle.mileage());
         }
         vehicleRepository.save(vehicleToPatch);

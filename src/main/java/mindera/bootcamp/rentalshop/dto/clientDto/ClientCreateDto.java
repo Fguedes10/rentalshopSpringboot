@@ -9,23 +9,24 @@ public record ClientCreateDto(
 
 
         @NotNull(message = Message.BLANK_FIRSTNAME)
+        @Size(max = 15)
         String firstName,
         @NotNull(message = Message.BLANK_LASTNAME)
         String lastName,
+        @Email
         @NotNull(message = Message.BLANK_EMAIL)
+        @Size(min = 10, max = 50)
         String email,
         @NotNull(message = Message.BLANK_DATEOFBIRTH)
         @Past(message = Message.INVALID_DATEOFBIRTH)
         LocalDate dateOfBirth,
-       // @Pattern(regexp = "/^\\d+$/", message = Message.INVALID_NIF)
-       // @Size(min = 9, max = 9)
         @NotNull(message = Message.BLANK_NIF)
+       // @Size(min = 100000000, max = 999999999)
         Long nif,
-       // @Pattern(regexp = "^[0-9]", message = Message.INVALID_DRIVERLICENSE)
-        //@Size(min = 9, max = 9)
+
+        //@Size(min = 100000000, max = 999999999)
         @NotNull(message = Message.BLANK_DRIVERLICENSE)
-        Long driverLicense,
-        @NotNull(message = Message.BLANK_DAILY_PRICE)
-        Long dailyPrice
+        Long driverLicense
+
 ) {
 }

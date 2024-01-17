@@ -43,14 +43,14 @@ public class ClientServiceImpl implements ClientService {
         }
         return (clientOptional.get());
     }
-
-    public void addNewClient(ClientCreateDto client) throws ClientAlreadyExistsException {
+    @Override
+    public Client addNewClient(ClientCreateDto client) throws ClientAlreadyExistsException {
         Optional<Client> clientOptional = this.clientRepository.findByEmail(client.email());
         if (clientOptional.isPresent()) {
             throw new ClientAlreadyExistsException(Message.REPEATED_EMAIL_ERROR);
         }
         Client clientToSave = ClientMapper.INSTANCE.fromClientCreateDtoToEntity(client);
-        clientRepository.save(clientToSave);
+        return clientRepository.save(clientToSave);
     }
 
     /*    public void deleteClient(Long clientId) {

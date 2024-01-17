@@ -42,8 +42,8 @@ public class ClientController {
             new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try {
-            clientServiceImpl.addNewClient(client);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+
+            return new ResponseEntity<>(clientServiceImpl.addNewClient(client), HttpStatus.CREATED);
         } catch (ClientAlreadyExistsException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }

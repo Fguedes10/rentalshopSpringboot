@@ -18,12 +18,10 @@ public class Rental {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "client_Id")
+    @ManyToOne(fetch = FetchType.EAGER)
     private Client client;
 
-    @ManyToOne
-    @JoinColumn(name = "vehicle_Id")
+    @ManyToOne(fetch = FetchType.EAGER)
     private Vehicle vehicle;
 
     private LocalDate rentalStartDate;
