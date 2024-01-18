@@ -2,6 +2,7 @@ package mindera.bootcamp.rentalshop.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ import java.time.temporal.ChronoUnit;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 @AllArgsConstructor
+@Builder
 @Entity
 @Table
 public class Rental {
@@ -38,11 +40,10 @@ public class Rental {
         this.vehicle = vehicle;
         this.rentalStartDate = rentalStartDate;
         this.rentalEndDate = rentalEndDate;
-        setTotalRentalCost();
     }
 
 
-    public void setTotalRentalCost() {
+    public void setTotalRentalCost(LocalDate rentalStartDate, LocalDate rentalEndDate) {
         Long totalDays = rentalStartDate.until(rentalEndDate, DAYS);
         this.totalRentalCost = totalDays * vehicle.getDailyPrice();
     }

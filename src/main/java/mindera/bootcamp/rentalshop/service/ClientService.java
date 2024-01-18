@@ -15,9 +15,9 @@ public interface ClientService {
 
     ClientGetDto getClient(Long clientId) throws ClientNotFoundException;
 
-    Client addNewClient(ClientCreateDto client) throws ClientAlreadyExistsException;
+    ClientGetDto addNewClient(ClientCreateDto client) throws ClientAlreadyExistsException;
 
-    void patchClient(Long clientId, ClientPatchDto client) throws ClientNotFoundException;
+    ClientGetDto patchClient(Long clientId, ClientPatchDto client) throws ClientNotFoundException;
 
     void putClient(Long clientId, Client client);
 }

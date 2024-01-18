@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 public record ClientCreateDto(
 
-
+        Long id,
         @NotNull(message = Message.BLANK_FIRSTNAME)
         @Size(max = 15)
         String firstName,
@@ -21,12 +21,13 @@ public record ClientCreateDto(
         @Past(message = Message.INVALID_DATEOFBIRTH)
         LocalDate dateOfBirth,
         @NotNull(message = Message.BLANK_NIF)
-       // @Size(min = 100000000, max = 999999999)
+        // @Size(min = 100000000, max = 999999999)
         Long nif,
 
         //@Size(min = 100000000, max = 999999999)
         @NotNull(message = Message.BLANK_DRIVERLICENSE)
         Long driverLicense
+
 
 ) {
 }

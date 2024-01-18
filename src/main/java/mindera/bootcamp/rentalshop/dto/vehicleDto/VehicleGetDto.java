@@ -1,6 +1,7 @@
 package mindera.bootcamp.rentalshop.dto.vehicleDto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import mindera.bootcamp.rentalshop.utilMessages.Message;
 
@@ -20,6 +21,8 @@ public record VehicleGetDto(
 
         LocalDate plateRegistrationDate,
 
-        Long dailyPrice
+        Long dailyPrice,
+
+        boolean available
 ) {
 }

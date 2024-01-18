@@ -8,8 +8,8 @@ import mindera.bootcamp.rentalshop.dto.rentalDto.RentalGetDto;
 import mindera.bootcamp.rentalshop.dto.rentalDto.RentalPatchDto;
 import mindera.bootcamp.rentalshop.entity.Client;
 import mindera.bootcamp.rentalshop.entity.Rental;
+import mindera.bootcamp.rentalshop.converter.RentalConverter;
 import mindera.bootcamp.rentalshop.entity.Vehicle;
-import mindera.bootcamp.rentalshop.mapper.RentalMapper;
 import mindera.bootcamp.rentalshop.repository.RentalRepository;
 import mindera.bootcamp.rentalshop.utilMessages.Message;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +30,9 @@ public class RentalServiceImpl implements RentalService {
 
 
     @Override
-    public List<RentalCreateDto> getRentals() {
+    public List<RentalGetDto> getRentals() {
         List<Rental> rentals = rentalRepository.findAll();
-        return rentals.stream().map(RentalMapper.INSTANCE::fromEntityToDto).toList();
+        return rentals.stream().map(RentalConverter::fromEntityToGetDto).toList();
     }
 
     @Override
@@ -41,38 +41,41 @@ public class RentalServiceImpl implements RentalService {
         if (rentalOptional.isEmpty()) {
             throw new RentalNotFoundException(Message.RENTAL_WITH_ID + rentalId + Message.NOT_EXISTS);
         }
-        return RentalMapper.INSTANCE.fromEntityToGetDto(rentalOptional.get());
+        return RentalConverter.fromEntityToGetDto(rentalOptional.get());
     }
 
 
-    public void addNewRental(RentalCreateDto rental) throws VehicleNotFoundException, ClientNotFoundException {
-        Vehicle vehicle = vehicleServiceImpl.getVehicleFromId(rental.vehicleId());
-        Client client = clientServiceImpl.getClientFromId(rental.clientId());
-        LocalDate startRental = rental.rentalStartDate();
-        LocalDate endRental = rental.rentalEndDate();
-        Rental newRental = new Rental(client, vehicle,startRental, endRental);
-        rentalRepository.save(newRental);
+    @Override
+    public RentalGetDto addNewRental(RentalCreateDto rental) throws VehicleNotFoundException, ClientNotFoundException {
+        Rental rentalToSave = RentalConverter.fromCreateDtoToEntity(rental,
+                clientServiceImpl.getClientFromId(rental.clientId()),
+                vehicleServiceImpl.getVehicleFromId(rental.vehicleId()));
+        rentalToSave.setTotalRentalCost(rentalToSave.getRentalStartDate(), rentalToSave.getRentalEndDate());
+         rentalRepository.save(rentalToSave);
+         return RentalConverter.fromEntityToGetDto(rentalToSave);
     }
 
-    public void patchRental(Long rentalId, RentalPatchDto rental) throws RentalNotFoundException {
+    @Override
+    public RentalGetDto patchRental(Long rentalId, RentalPatchDto rental) throws RentalNotFoundException {
         Optional<Rental> rentalOptional = rentalRepository.findById(rentalId);
-        if (rentalOptional.isEmpty()){
-            throw  new RentalNotFoundException(Message.RENTAL_WITH_ID + rentalId + Message.NOT_EXISTS);
+        if (rentalOptional.isEmpty()) {
+            throw new RentalNotFoundException(Message.RENTAL_WITH_ID + rentalId + Message.NOT_EXISTS);
         }
         Rental rentalToPatch = rentalOptional.get();
-        if(rental.rentalEndDate() != null && !rental.rentalEndDate().equals(rentalToPatch.getRentalEndDate())){
+        if (rental.rentalEndDate() != null && !rental.rentalEndDate().equals(rentalToPatch.getRentalEndDate())) {
             rentalToPatch.setRentalEndDate(rental.rentalEndDate());
         }
-        rentalRepository.save(rentalToPatch);
+        Rental rentalToSave = rentalRepository.save(rentalToPatch);
+        return RentalConverter.fromEntityToGetDto(rentalToSave);
     }
 
-/*    public void deleteRental(Long rentalId) {
+   public void deleteRental(Long rentalId) {
         Optional<Rental> deletedRental = rentalRepository.findById(rentalId);
         boolean exists = rentalRepository.existsById(rentalId);
         if (!exists) {
             throw new IllegalStateException(Message.RENTAL_WITH_ID + rentalId + Message.NOT_EXISTS);
         }
         rentalRepository.delete(deletedRental.get());
-    }*/
+    }
 
 }

@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 public record RentalGetDto(
 
+        Long id,
         ClientGetDto client,
         VehicleGetDto vehicle,
         LocalDate rentalStartDate,

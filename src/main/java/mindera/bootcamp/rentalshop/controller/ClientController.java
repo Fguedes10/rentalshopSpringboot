@@ -28,44 +28,30 @@ public class ClientController {
     }
 
     @GetMapping("/{clientId}")
-    public ResponseEntity<ClientGetDto> getClient(@PathVariable("clientId") Long clientId) {
-        try {
+    public ResponseEntity<ClientGetDto> getClient(@PathVariable("clientId") Long clientId) throws ClientNotFoundException {
             return new ResponseEntity<>(clientServiceImpl.getClient(clientId), HttpStatus.OK);
-        } catch (ClientNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
     }
 
     @PostMapping("/")
-    public ResponseEntity<Client> addNewClient(@Valid @RequestBody ClientCreateDto client, BindingResult bindingResult) {
+    public ResponseEntity<ClientGetDto> addNewClient(@Valid @RequestBody ClientCreateDto client, BindingResult bindingResult) throws ClientAlreadyExistsException {
         if (bindingResult.hasErrors()) {
             new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        try {
-
             return new ResponseEntity<>(clientServiceImpl.addNewClient(client), HttpStatus.CREATED);
-        } catch (ClientAlreadyExistsException e) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
     }
 
-/*    @DeleteMapping(path = "{clientId}")
-    public ResponseEntity<Client> deleteClientById(@PathVariable("clientId") Long clientId) {
-        clientService.deleteClient(clientId);
+   @DeleteMapping(path = "{clientId}")
+    public ResponseEntity<Client> deleteClientById(@PathVariable("clientId") Long clientId) throws ClientNotFoundException {
+        clientServiceImpl.deleteClient(clientId);
         return new ResponseEntity<>(HttpStatus.OK);
-    }*/
+    }
 
     @PatchMapping(path = "{clientId}")
-    public ResponseEntity<ClientPatchDto> patchClientById(@PathVariable("clientId") Long clientId, @Valid @RequestBody ClientPatchDto client, BindingResult bindingResult) {
+    public ResponseEntity<ClientGetDto> patchClientById(@PathVariable("clientId") Long clientId, @Valid @RequestBody ClientPatchDto client, BindingResult bindingResult) throws ClientNotFoundException {
         if (bindingResult.hasErrors()) {
             new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        try {
-            clientServiceImpl.patchClient(clientId, client);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (ClientNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(clientServiceImpl.patchClient(clientId, client), HttpStatus.OK);
     }
 
     @PutMapping(path = "{clientId}")

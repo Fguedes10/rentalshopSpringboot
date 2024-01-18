@@ -35,7 +35,9 @@ public record VehicleCreateDto(
         @NotNull(message = Message.BLANK_DAILY_PRICE)
         //@Size(min = 4, max = 4)
         //@Pattern(regexp = "^[0-9]", message = Message.INVALID_DAILY_PRICE)
-        Long dailyPrice
+        Long dailyPrice,
+        @NotNull
+        boolean available
 ) {
 }
 

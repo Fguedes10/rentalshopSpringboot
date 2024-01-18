@@ -24,44 +24,30 @@ public class RentalController {
 
 
     @GetMapping("/")
-    public ResponseEntity<List<RentalCreateDto>> getRentals() {
+    public ResponseEntity<List<RentalGetDto>> getRentals() {
         return new ResponseEntity<>(rentalServiceImpl.getRentals(), HttpStatus.OK);
     }
 
     @GetMapping("/{rentalId}")
-    public ResponseEntity<RentalGetDto> getRental(@PathVariable("rentalId") Long rentalId) {
-        try{
+    public ResponseEntity<RentalGetDto> getRental(@PathVariable("rentalId") Long rentalId) throws RentalNotFoundException {
         return new ResponseEntity<>(rentalServiceImpl.getRental(rentalId), HttpStatus.OK);
-        } catch (RentalNotFoundException e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
     }
 
     @PostMapping("/")
-    public ResponseEntity<Rental> addNewRental(@RequestBody RentalCreateDto rental) {
-        try {
-            rentalServiceImpl.addNewRental(rental);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (VehicleNotFoundException | ClientNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<RentalGetDto> addNewRental(@RequestBody RentalCreateDto rental) throws VehicleNotFoundException, ClientNotFoundException {
+        return new ResponseEntity<>( rentalServiceImpl.addNewRental(rental), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{rentalId}")
-    public ResponseEntity<RentalPatchDto> patchRental(@PathVariable("rentalId") Long rentalId,
-                                                      @Valid @RequestBody RentalPatchDto rental) {
-        try {
-            rentalServiceImpl.patchRental(rentalId, rental);
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
-        } catch (RentalNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<RentalGetDto> patchRental(@PathVariable("rentalId") Long rentalId,
+                                                      @Valid @RequestBody RentalPatchDto rental) throws RentalNotFoundException {
+        return new ResponseEntity<>(rentalServiceImpl.patchRental(rentalId, rental), HttpStatus.ACCEPTED);
     }
 
-/*    @DeleteMapping(path = "{rentalId}")
+    @DeleteMapping(path = "{rentalId}")
     public ResponseEntity<Rental> deleteRentalById(@PathVariable("rentalId") Long rentalId) {
         rentalServiceImpl.deleteRental(rentalId);
         return new ResponseEntity<>(HttpStatus.OK);
-    }*/
+    }
 
 }
