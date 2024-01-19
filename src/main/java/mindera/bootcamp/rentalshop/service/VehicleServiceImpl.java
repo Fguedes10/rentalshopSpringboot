@@ -88,7 +88,7 @@ public class VehicleServiceImpl implements VehicleService{
   public void deleteVehicle(Long vehicleId) {
         Optional<Vehicle> deletedVehicle = vehicleRepository.findById(vehicleId);
         boolean exists = vehicleRepository.existsById(vehicleId);
-        if (!exists) {
+        if (!exists && deletedVehicle.isEmpty()) {
             throw new IllegalStateException(Message.VEHICLE_WITH_ID + vehicleId + Message.NOT_EXISTS);
         }
         vehicleRepository.delete(deletedVehicle.get());

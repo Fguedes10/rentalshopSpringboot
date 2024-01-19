@@ -72,7 +72,7 @@ public class RentalServiceImpl implements RentalService {
    public void deleteRental(Long rentalId) {
         Optional<Rental> deletedRental = rentalRepository.findById(rentalId);
         boolean exists = rentalRepository.existsById(rentalId);
-        if (!exists) {
+        if (!exists && deletedRental.isEmpty()) {
             throw new IllegalStateException(Message.RENTAL_WITH_ID + rentalId + Message.NOT_EXISTS);
         }
         rentalRepository.delete(deletedRental.get());

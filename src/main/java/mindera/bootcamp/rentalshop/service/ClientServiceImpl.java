@@ -56,7 +56,7 @@ public class ClientServiceImpl implements ClientService {
     public void deleteClient(Long clientId) throws ClientNotFoundException {
             Optional<Client> deletedClient = clientRepository.findById(clientId);
             boolean exists = clientRepository.existsById(clientId);
-            if (!exists) {
+            if (!exists && deletedClient.isEmpty()) {
                 throw new ClientNotFoundException(Message.CLIENT_WITH_ID + clientId + Message.NOT_EXISTS);
             }
             clientRepository.delete(deletedClient.get());
