@@ -19,8 +19,13 @@ import java.util.List;
 @RestController
 @RequestMapping("api/version1/vehicles")
 public class VehicleController {
-    @Autowired
-    private VehicleServiceImpl vehicleServiceImpl;
+
+
+    private final VehicleServiceImpl vehicleServiceImpl;
+
+    public VehicleController(VehicleServiceImpl vehicleServiceImpl) {
+        this.vehicleServiceImpl = vehicleServiceImpl;
+    }
 
 
     @GetMapping("/")
@@ -36,7 +41,7 @@ public class VehicleController {
     @PostMapping("/")
     public ResponseEntity<VehicleGetDto> addNewVehicle(@Valid @RequestBody VehicleCreateDto vehicle, BindingResult bindingResult) throws VehiclePlateAlreadyExists {
         if (bindingResult.hasErrors()) {
-            new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
             return new ResponseEntity<>(vehicleServiceImpl.addNewVehicle(vehicle), HttpStatus.CREATED);
     }
@@ -50,7 +55,7 @@ public class VehicleController {
     @PatchMapping(path = "{vehicleId}")
     public ResponseEntity<VehicleGetDto> patchVehicleById(@PathVariable("vehicleId") Long vehicleId, @Valid @RequestBody VehiclePatchDto vehicle, BindingResult bindingResult) throws VehicleNotFoundException {
         if (bindingResult.hasErrors()) {
-            new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
             return new ResponseEntity<>(vehicleServiceImpl.patchVehicle(vehicleId, vehicle), HttpStatus.ACCEPTED);
     }

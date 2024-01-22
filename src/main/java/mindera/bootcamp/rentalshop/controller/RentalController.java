@@ -19,9 +19,12 @@ import java.util.List;
 @RestController
 @RequestMapping("api/version1/rentals")
 public class RentalController {
-    @Autowired
-    private RentalServiceImpl rentalServiceImpl;
 
+    private final RentalServiceImpl rentalServiceImpl;
+
+    public RentalController(RentalServiceImpl rentalServiceImpl) {
+        this.rentalServiceImpl = rentalServiceImpl;
+    }
 
     @GetMapping("/")
     public ResponseEntity<List<RentalGetDto>> getRentals() {

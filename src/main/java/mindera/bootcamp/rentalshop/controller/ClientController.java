@@ -8,7 +8,6 @@ import mindera.bootcamp.rentalshop.dto.clientDto.ClientGetDto;
 import mindera.bootcamp.rentalshop.dto.clientDto.ClientPatchDto;
 import mindera.bootcamp.rentalshop.entity.Client;
 import mindera.bootcamp.rentalshop.service.ClientServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -19,8 +18,11 @@ import java.util.List;
 @RestController
 @RequestMapping("api/version1/clients")
 public class ClientController {
-    @Autowired
-    private ClientServiceImpl clientServiceImpl;
+    private final ClientServiceImpl clientServiceImpl;
+
+    public ClientController(ClientServiceImpl clientServiceImpl) {
+        this.clientServiceImpl = clientServiceImpl;
+    }
 
     @GetMapping("/")
     public ResponseEntity<List<ClientCreateDto>> getClients() {
@@ -35,7 +37,7 @@ public class ClientController {
     @PostMapping("/")
     public ResponseEntity<ClientGetDto> addNewClient(@Valid @RequestBody ClientCreateDto client, BindingResult bindingResult) throws ClientAlreadyExistsException {
         if (bindingResult.hasErrors()) {
-            new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
             return new ResponseEntity<>(clientServiceImpl.addNewClient(client), HttpStatus.CREATED);
     }
@@ -49,7 +51,7 @@ public class ClientController {
     @PatchMapping(path = "{clientId}")
     public ResponseEntity<ClientGetDto> patchClientById(@PathVariable("clientId") Long clientId, @Valid @RequestBody ClientPatchDto client, BindingResult bindingResult) throws ClientNotFoundException {
         if (bindingResult.hasErrors()) {
-            new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(clientServiceImpl.patchClient(clientId, client), HttpStatus.OK);
     }
@@ -57,7 +59,7 @@ public class ClientController {
     @PutMapping(path = "{clientId}")
     public ResponseEntity<Client> putClientById(@PathVariable("clientId") Long clientId, @Valid @RequestBody Client client, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         clientServiceImpl.putClient(clientId, client);
         return new ResponseEntity<>(HttpStatus.OK);

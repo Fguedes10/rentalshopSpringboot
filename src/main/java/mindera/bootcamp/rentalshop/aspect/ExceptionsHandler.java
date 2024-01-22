@@ -6,6 +6,7 @@ import mindera.bootcamp.rentalshop.Exception.ClientException.ClientNotFoundExcep
 import mindera.bootcamp.rentalshop.Exception.RentalException.RentalNotFoundException;
 import mindera.bootcamp.rentalshop.Exception.VehicleException.VehicleNotFoundException;
 import mindera.bootcamp.rentalshop.Exception.VehicleException.VehiclePlateAlreadyExists;
+import mindera.bootcamp.rentalshop.utilMessages.Message;
 import org.aspectj.lang.annotation.Aspect;
 
 import org.slf4j.Logger;
@@ -27,12 +28,12 @@ public class ExceptionsHandler {
 
     @ExceptionHandler(value = {ClientNotFoundException.class, VehicleNotFoundException.class, RentalNotFoundException.class})
     public ResponseEntity<String> NotFoundHandler (Exception ex) {
-        logger.error("Known Exception: " + ex);
+        logger.error(Message.KNOW_EXPECTION, ex);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
     @ExceptionHandler(value = {ClientAlreadyExistsException.class, VehiclePlateAlreadyExists.class})
     public ResponseEntity<String> AlreadyExistsHandler (Exception ex) {
-        logger.error("Known Exception: " + ex);
+        logger.error(Message.KNOW_EXPECTION , ex);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 

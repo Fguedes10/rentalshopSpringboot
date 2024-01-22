@@ -67,4 +67,8 @@ public class Message {
     public static final String INVALID_START_DATE = "Please input a Start Date";
 
 
+    //Execptions
+
+    public static final String KNOW_EXPECTION = "Known Exception: %d";
+
 }

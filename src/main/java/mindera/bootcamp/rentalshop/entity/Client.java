@@ -36,11 +36,9 @@ public class Client {
     private LocalDate dateOfBirth;
 
     @Column(unique = true)
-
     private Long nif;
 
     @Column(unique = true)
-
     private Long driverLicense;
 
 

@@ -17,8 +17,11 @@ import java.util.Optional;
 
 @Service
 public class ClientServiceImpl implements ClientService {
-    @Autowired
-    private ClientRepository clientRepository;
+    private final ClientRepository clientRepository;
+
+    public ClientServiceImpl(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
+    }
 
 
     @Override
